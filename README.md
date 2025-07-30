@@ -5,8 +5,8 @@
 <h3> :coffee: ...... :crystal_ball:</h3>
 
 # Version 1.0 
-- !!:construction: En Construcción :construction:!!
-	- :construction_worker: Todo... Version 0.1
+- !! :construction: En Construcción :construction: !!
+	- :construction_worker: Todo...
 - :bug::bug::bug: Aún no tenemos bugs!!, seguiremos informando :bug::bug::bug:
 
 # Modulos
