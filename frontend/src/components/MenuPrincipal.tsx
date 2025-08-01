@@ -14,9 +14,16 @@ export function MenuPrincipal() {
     
     const [ShowLogin, setShowLogin] = useState("hidden");
 
+
+    const [ShowSignUp, setShowSignUp] = useState("hidden");
+
     const toggleLogin = () => {
         setShowLogin(prev => prev === "" ? "hidden" : "");
     };
+
+    const toggleSignUp = () => {
+        setShowSignUp(prev => prev === "" ? "hidden" : "");
+    };    
 
     return (
         <>
@@ -43,11 +50,14 @@ export function MenuPrincipal() {
             <LucideShoppingBasket className="iconcarrito cursor-pointer" size={30} color="white" /> 
            </div>
         </div>
+    <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute"> {/* Contenedor padre */}
+        <Card className={`w-full max-w-sm ml-auto mr-[15%] absolute ${ShowLogin}`}>
+            <LoginForm />
+        </Card>  
+    </div>
 
-    <Card className={`w-full max-w-sm ml-auto mr-[15%] ${ShowLogin}`}>
-        <LoginForm />
-    </Card>  
 
+        <SignUpForm />
     </>
     );
 }
