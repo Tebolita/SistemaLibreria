@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_MYSQL")
+}
+
+model tb_grupos {
+  id_grupo    Int           @id @unique(map: "idtb_grupos_UNIQUE")
+  nombre      String?       @db.VarChar(100)
+  tb_ingresos tb_ingresos[]
+}
+
+model tb_ingresos {
+  id_ingreso    Int         @id @unique(map: "idt_bitacora_UNIQUE") @default(autoincrement())
+  id_usuario    Int
+  fecha_ingreso DateTime    @db.DateTime(0)
+  fecha_salida  DateTime?   @db.DateTime(0)
+  id_grupo      Int
+  tb_grupos     tb_grupos   @relation(fields: [id_grupo], references: [id_grupo], onDelete: NoAction, onUpdate: NoAction, map: "id_grupo")
+  tb_usuarios   tb_usuarios @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "id_usuario")
+
+  @@index([id_grupo], map: "id_grupo_idx")
+  @@index([id_usuario], map: "id_usuario_idx")
+}
+
+model tb_roles {
+  id_rol      Int           @id @default(autoincrement())
+  nombre      String        @db.VarChar(45)
+  tb_usuarios tb_usuarios[]
+}
+
+model tb_usuarios {
+  id_usuario  Int           @id @unique(map: "idt_usuarios_UNIQUE") @default(autoincrement())
+  nombre      String        @db.VarChar(100)
+  correo      String        @db.VarChar(100)
+  telefono    String        @db.VarChar(100)
+  id_rol      Int
+  password    String        @db.Text
+  avatar      String        @db.LongText
+  nickname    String        @unique(map: "nickname_UNIQUE") @db.VarChar(45)
+  tb_ingresos tb_ingresos[]
+  tb_roles    tb_roles      @relation(fields: [id_rol], references: [id_rol], onDelete: NoAction, onUpdate: NoAction, map: "fk_idrol")
+
+  @@index([id_rol], map: "fk_idrol_idx")
+}
