@@ -76,13 +76,12 @@ export function MenuPrincipal() {
             </div>
 
             {/* FORMULARIO LOGIN */}
-            <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute">
+            <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute z-100">
                 <Card className={`w-full max-w-sm ml-auto mr-[15%] absolute ${ShowLogin}`}>
                     <LoginForm />
                 </Card>  
             </div>
 
-            <SignUpForm />
         </>
     );
 }
