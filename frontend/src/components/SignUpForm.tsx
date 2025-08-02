@@ -12,7 +12,7 @@ export function SignUpForm() {
 <div className="min-h-screen flex items-center justify-center">
   <Card className="w-full max-w-4xl p-6 shadow-xl bg-white">
     <CardHeader>
-      <CardTitle className="text-center text-2xl">Crear Cuenta</CardTitle>
+      <CardTitle className="text-center text-2xl">Libreria SPD</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-x">

@@ -1,55 +1,52 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import {CardAction,CardContent,CardDescription,CardFooter,CardHeader,CardTitle,} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 export function LoginForm() {
+  return (
+    <div className="max-w-xs mx-auto p-3 space-y-5"> {/* Aumenté space-y-6 para más separación */}
+      <h1 className="text-xl font-semibold text-center">
+        Iniciar Sesión
+      </h1>
 
-    return (
-    <>
-        <CardHeader>
-            <CardTitle> Iniciar sesion con una cuenta creada</CardTitle>
-            <CardDescription>
-            Escribe tu correo y contraseña para iniciar sesion
-            </CardDescription>
-            <CardAction>
-            <Button variant="link" className="cursor-pointer">Crear Cuenta</Button>
-            </CardAction>
-        </CardHeader>
-        <CardContent>
-            <form>
-            <div className="flex flex-col gap-6 ">
-                <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                    id="Correo"
-                    type="Correo"
-                    placeholder="m@example.com"
-                    required
-                />
-                </div>
-                <div className="grid gap-2">
-                <div className="flex items-center">
-                    <Label htmlFor="password">Contraseña</Label>
-                    <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                    >
-                        Olvide mi contraseña
-                    </a>
-                </div>
-                <Input id="password" type="password" required />
-                </div>
-            </div>
-            </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
-                Iniciar Sesion
-            </Button>
-        </CardFooter>     
-    </>  
-    );
+      <div className="space-y-4"> {/* Más espacio entre grupos */}
+        <div className="space-y-2">
+          <Label htmlFor="email">Correo Electrónico</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="usuario1@gmail.com"
+            className="h-9 pex-6" /* Asegura ancho completo */
+          />
+        </div>
+
+        <div className="space-y-3">
+          <Label htmlFor="password">Contraseña</Label>
+          <Input
+            id="password"
+            type="password"
+            className="h-9 px-6"
+          />
+          <div className="flex center pt-1"> 
+            <button className="text-xs text-gray-600 hover:text-gray-800 hover:underline">
+              ¿Olvidó su contraseña?
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t my-3"></div> {/* Divisor con más espacio */}
+
+      <div className="flex space-x-3 justify-center">
+        <Button variant="outline" className="h-9 px-6">
+          Cancelar
+        </Button>
+        <Button className="h-9 px-6 bg-blue-900 hover:bg-blue-800 text-white">
+          Ingresar
+        </Button>
+      </div>
+    </div>
+  )
 }
