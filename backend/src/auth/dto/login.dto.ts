@@ -7,15 +7,15 @@ export class ValidateLoginDto {
     @IsString()
     @MinLength(4)
     @ApiProperty()
-    nickname: string;
+    Usuario: string;
 
     @IsEmail()
     @ApiProperty()
-    correo: string;
+    Correo: string;
 
     @IsString()
     @MinLength(6)
     @Transform(({ value }) => value.trim())
     @ApiProperty()
-    password: string;  
+    Contrasena: string;  
 }

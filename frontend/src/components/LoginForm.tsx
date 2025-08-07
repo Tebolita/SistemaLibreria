@@ -19,9 +19,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true)
     try {
       const res = await login({
-        correo: email,
-        nickname: usuario,
-        password: password // <-- Cambia 'pass' por 'password'
+        Correo: email,
+        Usuario: usuario,
+        Contrasena: password
       })
       if (res.access_token) {
         toast.success("Inicio de sesión exitoso", { duration: 3000 })

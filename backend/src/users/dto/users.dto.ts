@@ -1,10 +1,10 @@
 
 import { IsEmail, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { tb_usuarios } from "@prisma/client";
+import { Usuarios } from "@prisma/client";
 import { Transform } from 'class-transformer';
 
-export type CreateRegisterDto = Omit<tb_usuarios, 'id_usuario' | 'createdAt' | 'updatedAt'>;
+export type CreateRegisterDto = Omit<Usuarios, 'IdUsuario' | 'createdAt' | 'updatedAt'>;
 
 export class ValidateRegisterDto {
     @IsString()

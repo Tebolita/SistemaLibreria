@@ -6,11 +6,11 @@ import * as bcryptjs from 'bcryptjs';
 export class UsersService {
     constructor(private prismaService: PrismaService) {}
 
-    async findOne(email: string, nickname: string) {
-        const userEmailFound = await this.prismaService.tb_usuarios.findFirst({
+    async findOne(email: string, usuario: string) {
+        const userEmailFound = await this.prismaService.usuarios.findFirst({
             where: {
-                correo: email,
-                nickname: nickname
+                Correo: email,
+                Usuario: usuario
             }
         })
 
@@ -21,29 +21,27 @@ export class UsersService {
         return userEmailFound;
     }
 
-    async getOne(correo: string, nickname: string) {
-        const userFound = await this.prismaService.tb_usuarios.findFirst({
+    async getOne(correo: string, usuario: string) {
+        const userFound = await this.prismaService.usuarios.findFirst({
             where: { 
-                correo: correo,
-                nickname: nickname
+                Correo: correo,
+                Usuario: usuario
             },
             select: {
-                nombre: true,
-                nickname: true,
-                id_usuario: true,
-                correo: true,
-                telefono: true,
-                avatar: true
+                Nombre: true,
+                Usuario: true,
+                IdUsuario: true,
+                Correo: true
             }
           })
-          console.log("Email recibido:", correo, "Nickname recibido:", nickname);
+          console.log("Email recibido:", correo, "Nickname recibido:", usuario);
           if (!userFound) {
             throw new NotFoundException(`User ${correo} not found`);
           }
 
           
       
-          return {...userFound, idHasd : await bcryptjs.hash(userFound.id_usuario.toString(), 10) };
+          return {...userFound, idHasd : await bcryptjs.hash(userFound.IdUsuario.toString(), 10) };
     }
 
 }

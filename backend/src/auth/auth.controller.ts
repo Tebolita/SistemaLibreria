@@ -29,7 +29,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() ValidateLoginDto: ValidateLoginDto) {
-    return this.authService.signIn(ValidateLoginDto.correo, ValidateLoginDto.nickname, ValidateLoginDto.password);
+    return this.authService.signIn(ValidateLoginDto.Correo, ValidateLoginDto.Usuario, ValidateLoginDto.Contrasena);
   }
 
   @UseGuards(AuthGuard)

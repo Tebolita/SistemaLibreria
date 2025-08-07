@@ -3,46 +3,152 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL_MYSQL")
+  provider = "sqlserver"
+  url      = env("DATABASE_URL_SQLSERVER")
 }
 
-model tb_grupos {
-  id_grupo    Int           @id @unique(map: "idtb_grupos_UNIQUE")
-  nombre      String?       @db.VarChar(100)
-  tb_ingresos tb_ingresos[]
+model Bodegas {
+  IdBodega                                                 Int                 @id(map: "PK__Bodegas__42B66742FAE5FAE9") @default(autoincrement())
+  Nombre                                                   String?             @db.VarChar(100)
+  Ubicacion                                                String?             @db.Text
+  Encargado                                                String?             @db.VarChar(100)
+  DetalleFactura                                           DetalleFactura[]
+  InventarioBodega                                         InventarioBodega[]
+  MovimientosBodega                                        MovimientosBodega[]
+  TrasladosBodega_TrasladosBodega_IdBodegaOrigenToBodegas  TrasladosBodega[]   @relation("TrasladosBodega_IdBodegaOrigenToBodegas")
+  TrasladosBodega_TrasladosBodega_IdBodegaDestinoToBodegas TrasladosBodega[]   @relation("TrasladosBodega_IdBodegaDestinoToBodegas")
 }
 
-model tb_ingresos {
-  id_ingreso    Int         @id @unique(map: "idt_bitacora_UNIQUE") @default(autoincrement())
-  id_usuario    Int
-  fecha_ingreso DateTime    @db.DateTime(0)
-  fecha_salida  DateTime?   @db.DateTime(0)
-  id_grupo      Int
-  tb_grupos     tb_grupos   @relation(fields: [id_grupo], references: [id_grupo], onDelete: NoAction, onUpdate: NoAction, map: "id_grupo")
-  tb_usuarios   tb_usuarios @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "id_usuario")
-
-  @@index([id_grupo], map: "id_grupo_idx")
-  @@index([id_usuario], map: "id_usuario_idx")
+model Categorias {
+  IdCategoria Int         @id(map: "PK__Categori__A3C02A10F823D555") @default(autoincrement())
+  Nombre      String?     @db.VarChar(50)
+  Descripcion String?     @db.Text
+  Productos   Productos[]
 }
 
-model tb_roles {
-  id_rol      Int           @id @default(autoincrement())
-  nombre      String        @db.VarChar(45)
-  tb_usuarios tb_usuarios[]
+model Clientes {
+  IdCliente      Int        @id(map: "PK__Clientes__D59466423D16247D") @default(autoincrement())
+  NombreCompleto String?    @db.VarChar(100)
+  Correo         String?    @db.VarChar(100)
+  Telefono       String?    @db.VarChar(20)
+  Direccion      String?    @db.Text
+  Facturas       Facturas[]
 }
 
-model tb_usuarios {
-  id_usuario  Int           @id @unique(map: "idt_usuarios_UNIQUE") @default(autoincrement())
-  nombre      String        @db.VarChar(100)
-  correo      String        @db.VarChar(100)
-  telefono    String        @db.VarChar(100)
-  id_rol      Int
-  password    String        @db.Text
-  avatar      String        @db.LongText
-  nickname    String        @unique(map: "nickname_UNIQUE") @db.VarChar(45)
-  tb_ingresos tb_ingresos[]
-  tb_roles    tb_roles      @relation(fields: [id_rol], references: [id_rol], onDelete: NoAction, onUpdate: NoAction, map: "fk_idrol")
+model DetalleFactura {
+  IdDetalle      Int        @id(map: "PK__DetalleF__E43646A5E8D1D00E") @default(autoincrement())
+  IdFactura      Int?
+  IdProducto     Int?
+  Cantidad       Int?
+  PrecioUnitario Decimal?   @db.Decimal(10, 2)
+  Subtotal       Decimal?   @db.Decimal(10, 2)
+  IdBodega       Int?
+  Bodegas        Bodegas?   @relation(fields: [IdBodega], references: [IdBodega], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdBod__6B24EA82")
+  Facturas       Facturas?  @relation(fields: [IdFactura], references: [IdFactura], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdFac__4D94879B")
+  Productos      Productos? @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdPro__4E88ABD4")
+}
 
-  @@index([id_rol], map: "fk_idrol_idx")
+model Facturas {
+  IdFactura      Int              @id(map: "PK__Facturas__50E7BAF18149C1A2") @default(autoincrement())
+  IdCliente      Int?
+  Fecha          DateTime?        @db.DateTime
+  Total          Decimal?         @db.Decimal(10, 2)
+  IdUsuario      Int?
+  IdMetodoPago   Int?
+  DetalleFactura DetalleFactura[]
+  Clientes       Clientes?        @relation(fields: [IdCliente], references: [IdCliente], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdClie__48CFD27E")
+  MetodosPago    MetodosPago?     @relation(fields: [IdMetodoPago], references: [IdMetodoPago], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdMeto__4AB81AF0")
+  Usuarios       Usuarios?        @relation(fields: [IdUsuario], references: [IdUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdUsua__49C3F6B7")
+}
+
+model InventarioBodega {
+  IdInventario Int        @id(map: "PK__Inventar__1927B20CE0233D6E") @default(autoincrement())
+  IdProducto   Int?
+  IdBodega     Int?
+  Cantidad     Int?
+  Bodegas      Bodegas?   @relation(fields: [IdBodega], references: [IdBodega], onDelete: NoAction, onUpdate: NoAction, map: "FK__Inventari__IdBod__60A75C0F")
+  Productos    Productos? @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Inventari__IdPro__5FB337D6")
+}
+
+model MetodosPago {
+  IdMetodoPago Int        @id(map: "PK__MetodosP__6F49A9BE73136A63") @default(autoincrement())
+  Metodo       String?    @db.VarChar(50)
+  Facturas     Facturas[]
+}
+
+model MovimientosBodega {
+  IdMovimiento   Int        @id(map: "PK__Movimien__881A6AE0E1ABD81B") @default(autoincrement())
+  Fecha          DateTime?  @db.DateTime
+  TipoMovimiento String?    @db.VarChar(20)
+  Cantidad       Int?
+  IdProducto     Int?
+  IdBodega       Int?
+  Observaciones  String?    @db.Text
+  Bodegas        Bodegas?   @relation(fields: [IdBodega], references: [IdBodega], onDelete: NoAction, onUpdate: NoAction, map: "FK__Movimient__IdBod__6477ECF3")
+  Productos      Productos? @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Movimient__IdPro__6383C8BA")
+}
+
+model Productos {
+  IdProducto        Int                 @id(map: "PK__Producto__0988921077141195") @default(autoincrement())
+  Nombre            String?             @db.VarChar(100)
+  Descripcion       String?             @db.Text
+  Precio            Decimal?            @db.Decimal(10, 2)
+  Stock             Int?
+  IdCategoria       Int?
+  IdProveedor       Int?
+  DetalleFactura    DetalleFactura[]
+  InventarioBodega  InventarioBodega[]
+  MovimientosBodega MovimientosBodega[]
+  Categorias        Categorias?         @relation(fields: [IdCategoria], references: [IdCategoria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Productos__IdCat__4316F928")
+  Proveedores       Proveedores?        @relation(fields: [IdProveedor], references: [IdProveedor], onDelete: NoAction, onUpdate: NoAction, map: "FK__Productos__IdPro__440B1D61")
+  TrasladosBodega   TrasladosBodega[]
+}
+
+model Proveedores {
+  IdProveedor   Int         @id(map: "PK__Proveedo__E8B631AFC0642160") @default(autoincrement())
+  NombreEmpresa String?     @db.VarChar(100)
+  Contacto      String?     @db.VarChar(100)
+  Telefono      String?     @db.VarChar(20)
+  Correo        String?     @db.VarChar(100)
+  Productos     Productos[]
+}
+
+model Roles {
+  IdRol     Int        @id(map: "PK__Roles__2A49584C5F757A79") @default(autoincrement())
+  NombreRol String?    @db.VarChar(50)
+  Usuarios  Usuarios[]
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61A1B6A384") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model TrasladosBodega {
+  IdTraslado                                       Int        @id(map: "PK__Traslado__9FEFD23CFE47C91C") @default(autoincrement())
+  IdProducto                                       Int?
+  IdBodegaOrigen                                   Int?
+  IdBodegaDestino                                  Int?
+  Cantidad                                         Int?
+  Fecha                                            DateTime?  @db.DateTime
+  Comentario                                       String?    @db.Text
+  Bodegas_TrasladosBodega_IdBodegaOrigenToBodegas  Bodegas?   @relation("TrasladosBodega_IdBodegaOrigenToBodegas", fields: [IdBodegaOrigen], references: [IdBodega], onDelete: NoAction, onUpdate: NoAction, map: "FK__Traslados__IdBod__68487DD7")
+  Bodegas_TrasladosBodega_IdBodegaDestinoToBodegas Bodegas?   @relation("TrasladosBodega_IdBodegaDestinoToBodegas", fields: [IdBodegaDestino], references: [IdBodega], onDelete: NoAction, onUpdate: NoAction, map: "FK__Traslados__IdBod__693CA210")
+  Productos                                        Productos? @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Traslados__IdPro__6754599E")
+}
+
+model Usuarios {
+  IdUsuario  Int        @id(map: "PK__Usuarios__5B65BF978C2216F6") @default(autoincrement())
+  Nombre     String?    @db.VarChar(100)
+  Usuario    String?    @unique(map: "UQ__Usuarios__E3237CF78EC09F9E") @db.VarChar(50)
+  Contrasena String?    @db.VarChar(100)
+  IdRol      Int?
+  Correo     String?    @db.VarChar(100)
+  Facturas   Facturas[]
+  Roles      Roles?     @relation(fields: [IdRol], references: [IdRol], onDelete: NoAction, onUpdate: NoAction, map: "FK__Usuarios__IdRol__3A81B327")
 }
