@@ -16,7 +16,7 @@ export default function Roles() {
 
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>Tabla de lista de roles</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">IdRol</TableHead>
@@ -33,7 +33,7 @@ export default function Roles() {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={2}>Total</TableCell>
+          <TableCell colSpan={2} className="text-center">Roles</TableCell>
         </TableRow>
       </TableFooter>
     </Table>

@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 
 import '../../style/MenuPrincipal.css';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -6,8 +7,12 @@ import { LucideShoppingBasket, ChevronDown, ChevronUp } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { useState } from 'react';
 import { LoginForm } from './LoginForm';
+import { useRouter } from 'next/navigation'
+
+
 
 function SignUpForm() {
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold text-center mb-6">Crear cuenta</h2>
@@ -102,6 +107,16 @@ export function MenuPrincipal() {
     const [selectedMunicipio, setSelectedMunicipio] = useState("Guatemala");
     const [selectedZona, setSelectedZona] = useState("Zona 9");
 
+    const router = useRouter();
+
+    const handleRedirect = () => {
+    router.push("/nuevousuario");
+    };
+
+    const regresarInicio = () => {
+    router.push("/");
+    };
+
     const toggleLogin = () => {
         setShowLogin(prev => prev === "" ? "hidden" : "");
         setShowSignUp("hidden");
@@ -139,12 +154,16 @@ export function MenuPrincipal() {
                             className="logo" 
                             style={{ width: '50px' }} 
                         />
-                        <span style={{
+                        <span
+                        onClick={regresarInicio}
+                        style={{
                             color: 'white',
                             fontSize: '1.2rem',
                             fontWeight: 'bold',
                             fontFamily: 'Arial, sans-serif'
-                        }}>
+                        }}
+                        className='cursor-pointer'>
+                            
                             LIBRERIA SPD
                         </span>
                     </div>
@@ -212,7 +231,7 @@ export function MenuPrincipal() {
 
                         {/* Botón Registrarse */}
                         <button 
-                            onClick={toggleSignUp}
+                        onClick={handleRedirect}
                             style={{
                                 background: 'transparent',
                                 border: '1px solid white',
@@ -223,7 +242,7 @@ export function MenuPrincipal() {
                                 fontSize: '0.9rem'
                             }}
                         >
-                            Registrarse
+                        Registrarse
                         </button>
                     </div>
                 </div>

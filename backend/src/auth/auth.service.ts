@@ -28,14 +28,14 @@ export class AuthService {
         return { message: 'User not found' };
       }
   
-      // const isPasswordValid = await bcryptjs.compare(Contrasena, user.Contrasena || '');
-      // if (!isPasswordValid) {
-      //   return { message: 'Password is incorrect' };
-      // }
+      const isPasswordValid = await bcryptjs.compare(Contrasena, user.Contrasena || '');
+      if (!isPasswordValid) {
+        return { message: 'Password is incorrect' };
+      }
   
-      // if (!Correo) {
-      //   return { message: 'Email is required' };
-      // }
+      if (!Correo) {
+        return { message: 'Email is required' };
+      }
   
       const payload = { sub: user.Correo, username: user.Usuario };
       return {
@@ -59,6 +59,7 @@ export class AuthService {
           Usuario: Usuario,
           Contrasena: await bcryptjs.hash(Contrasena, 10),
           Correo: Correo,
+          IdRol: 2
         },
       });
   
