@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ShoppingCart, User, Search, Menu, Heart } from "lucide-react"
-
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { LoginForm } from "./LoginForm"
 
 
 
@@ -17,7 +18,7 @@ const slides = [
     subtitle: "Hasta 25% OFF en títulos seleccionados",
     ctaLabel: "Ver ofertas",
     ctaHref: "/ofertas",
-    bg: "from-pink-500 to-red-500",
+    bg: "bg-[url('https://i.pinimg.com/originals/56/39/4e/56394e1cfd7ab0204703ff6e49936d55.gif')]",
   },
   {
     id: "promo-2",
@@ -25,7 +26,7 @@ const slides = [
     subtitle: "Fin de ciclo: arma tu paquete",
     ctaLabel: "Armar paquete",
     ctaHref: "/paquetes",
-    bg: "from-blue-500 to-indigo-500",
+    bg: "bg-[url('https://i.pinimg.com/originals/b1/5b/d5/b15bd596014d9d9310e59b07b85da550.gif')]",
   },
   {
     id: "promo-3",
@@ -33,7 +34,7 @@ const slides = [
     subtitle: "2x1 en destacados de temporada",
     ctaLabel: "Comprar ahora",
     ctaHref: "/accesorios",
-    bg: "from-green-500 to-emerald-500",
+    bg: "bg-[url('https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif')]",
   },
 ]
 
@@ -45,12 +46,17 @@ const categories = [
   { name: "Universitarios", href: "/universitarios" },
   { name: "Infantil", href: "/infantil" },
   { name: "Papelería", href: "/papeleria" },
-  { name: "Tecnología", href: "/tecnologia" },
 ]
+
 
 // ====== NAVBAR ======
 function NavBar() {
+  const [ShowLogin, setShowLogin] = useState("hidden");
+  const toggleLogin = () => {
+      setShowLogin(prev => prev === "" ? "hidden" : "");
+  };
   return (
+    <>      
     <header className="w-full border-b">
       {/* Top bar */}
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2">
@@ -82,10 +88,10 @@ function NavBar() {
         {/* User / Wishlist / Cart */}
         <div className="flex items-center gap-2">
           <Button asChild variant="ghost" className="hidden md:inline-flex">
-            <Link href="/cuenta" className="flex items-center gap-2">
+            <span onClick={toggleLogin} className="flex items-center gap-2 cursor-pointer">
               <User className="size-4" />
               <span>Cuenta</span>
-            </Link>
+            </span>
           </Button>
           <Button asChild variant="ghost" size="icon">
             <Link href="/favoritos" aria-label="Favoritos">
@@ -111,7 +117,11 @@ function NavBar() {
           </Button>
         ))}
       </nav>
-
+    <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute" style={{ zIndex: 100 }}>
+        <Card className={`w-full max-w-sm ml-auto mr-[15%] absolute ${ShowLogin}`}>
+            <LoginForm />
+        </Card>  
+    </div> 
       {/* Mobile search */}
       <div className="px-3 pb-3 md:hidden">
         <form
@@ -126,6 +136,9 @@ function NavBar() {
         </form>
       </div>
     </header>
+
+
+    </>
   )
 }
 
@@ -147,7 +160,7 @@ function HeroCarousel() {
         <AnimatePresence initial={false}>
           <motion.div
             key={current.id}
-            className={`absolute inset-0 bg-gradient-to-br ${current.bg} flex items-center justify-center`}
+            className={`absolute inset-0 bg-cover bg-no-repeat bg-center ${current.bg} flex items-center justify-center`}
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -199,7 +212,7 @@ function HeroCarousel() {
 // ====== PÁGINA ======
 export default function PortadaPage() {
   return (
-    <main className="min-h-dvh bg-white">
+    <main className=" bg-white">
       <NavBar />
       <HeroCarousel />
     </main>

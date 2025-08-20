@@ -5,6 +5,7 @@ import {  CreateRegisterDto } from './dto/register.dto';
 import { CreateRoleDto } from './dto/role.dto';
 import { Injectable } from '@nestjs/common';
 import { ValidateTokenDto } from './dto/validateToken.dto';
+import { RolesService } from 'src/roles/roles.service';
 
 import * as bcryptjs from 'bcryptjs';
 
@@ -13,7 +14,8 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private prismaService: PrismaService
+    private prismaService: PrismaService,
+    private rolesService: RolesService,
   ) {}
 
   // Use to sign in a user
@@ -27,7 +29,8 @@ export class AuthService {
       if (!user) {
         return { message: 'User not found' };
       }
-  
+      const rol = await this.rolesService.findOne(user.IdRol || 5);
+      
       const isPasswordValid = await bcryptjs.compare(Contrasena, user.Contrasena || '');
       if (!isPasswordValid) {
         return { message: 'Password is incorrect' };
@@ -37,7 +40,7 @@ export class AuthService {
         return { message: 'Email is required' };
       }
   
-      const payload = { sub: user.Correo, username: user.Usuario };
+      const payload = { sub: user.Correo, username: user.Usuario, role: rol?.NombreRol };
       return {
         access_token: await this.jwtService.signAsync(payload),
       };

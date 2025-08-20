@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
-
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const productos = {
   libros: [
@@ -168,66 +168,68 @@ const productos = {
 
 export function ProductosPopulares({ isLoading = false }) {
   return (
-    <div className="w-full p-5 space-y-10">
-      {/* SECCIÓN LIBROS - VERSIÓN SIMPLIFICADA */}
-      <div>
-        <h2 className="text-2xl font-bold mb-5 text-center">Libros Populares</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {isLoading ? (
-            [...Array(10)].map((_, i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="h-40 w-full rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            ))
-          ) : (
-            productos.libros.map((libro) => (
-              <div key={libro.id} className="flex flex-col items-center">
-                <div className="h-40 w-32 mb-2 overflow-hidden flex items-center justify-center bg-gray-50 rounded-lg">
-                  <img
-                    src={libro.image}
-                    alt={libro.title}
-                    className="h-full object-contain"
-                  />
+    <ProtectedRoute allowedRoles={["guest", "user", "admin"]}>
+      <div className="w-full p-5 space-y-10">
+        {/* SECCIÓN LIBROS - VERSIÓN SIMPLIFICADA */}
+        <div>
+          <h2 className="text-2xl font-bold mb-5 text-center">Libros Populares</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {isLoading ? (
+              [...Array(10)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-40 w-full rounded-lg" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
                 </div>
-                <h3 className="font-medium text-center">{libro.title}</h3>
-                <p className="text-indigo-600 font-bold">{libro.price}</p>
-              </div>
-            ))
-          )}
+              ))
+            ) : (
+              productos.libros.map((libro) => (
+                <div key={libro.id} className="flex flex-col items-center">
+                  <div className="h-40 w-32 mb-2 overflow-hidden flex items-center justify-center bg-gray-50 rounded-lg">
+                    <img
+                      src={libro.image}
+                      alt={libro.title}
+                      className="h-full object-contain cursor-pointer hover:scale-105 transition-transform duration-200"
+                    />
+                  </div>
+                  <h3 className="font-medium text-center">{libro.title}</h3>
+                  <p className="text-indigo-600 font-bold">{libro.price}</p>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* SECCIÓN ÚTILES - VERSIÓN SIMPLIFICADA */}
-      <div>
-        <h2 className="text-2xl font-bold mb-5 text-center">Útiles Escolares</h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
-          {isLoading ? (
-            [...Array(12)].map((_, i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="h-32 w-full rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            ))
-          ) : (
-            productos.utiles.map((util) => (
-              <div key={util.id} className="flex flex-col items-center">
-                <div className="h-32 w-24 mb-2 overflow-hidden flex items-center justify-center bg-gray-50 rounded-lg">
-                  <img
-                    src={util.image}
-                    alt={util.title}
-                    className="h-full object-contain"
-                  />
+        {/* SECCIÓN ÚTILES - VERSIÓN SIMPLIFICADA */}
+        <div>
+          <h2 className="text-2xl font-bold mb-5 text-center">Útiles Escolares</h2>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+            {isLoading ? (
+              [...Array(12)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-32 w-full rounded-lg" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
                 </div>
-                <h3 className="text-sm font-medium text-center">{util.title}</h3>
-                <p className="text-indigo-600 font-bold text-sm">{util.price}</p>
-              </div>
-            ))
-          )}
+              ))
+            ) : (
+              productos.utiles.map((util) => (
+                <div key={util.id} className="flex flex-col items-center">
+                  <div className="h-32 w-24 mb-2 overflow-hidden flex items-center justify-center bg-gray-50 rounded-lg">
+                    <img
+                      src={util.image}
+                      alt={util.title}
+                      className="h-full object-contain cursor-pointer hover:scale-105 transition-transform duration-200"
+                    />
+                  </div>
+                  <h3 className="text-sm font-medium text-center">{util.title}</h3>
+                  <p className="text-indigo-600 font-bold text-sm">{util.price}</p>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   )
 }

@@ -20,7 +20,13 @@ export class RolesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} role`;
+    const nombreRol = this.prismaService.roles.findUnique({
+      where: { IdRol: id },
+      select: {
+        NombreRol: true,
+      },
+    });
+    return nombreRol;
   }
 
   async  update(id: number, updateRoleDto: UpdateRoleDto) {

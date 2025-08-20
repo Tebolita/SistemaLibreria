@@ -1,0 +1,15 @@
+import { useEffect, useState } from "react";
+import { GetEmail } from "@/app/login.api";
+
+export function useUserRole() {
+  const [role, setRole] = useState<string>("guest");
+
+  useEffect(() => {
+    async function fetchRole() {
+      const emailUser = await GetEmail();
+      setRole(emailUser.role || "guest");
+    }
+    fetchRole();
+  }, []);
+  return role;
+}
