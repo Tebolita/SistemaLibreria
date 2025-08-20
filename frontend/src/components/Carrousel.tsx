@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { ShoppingCart, User, Search, Menu, Heart } from "lucide-react"
+import { ShoppingCart, User, Search, Menu, Heart, UserPlus2Icon } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { LoginForm } from "./LoginForm"
+import { useRouter } from "next/navigation"
 
 
 
@@ -55,6 +56,10 @@ function NavBar() {
   const toggleLogin = () => {
       setShowLogin(prev => prev === "" ? "hidden" : "");
   };
+  const router = useRouter();
+  const nuevoUsuario = () => {
+    router.push("/nuevousuario");
+  };  
   return (
     <>      
     <header className="w-full border-b">
@@ -93,6 +98,14 @@ function NavBar() {
               <span>Cuenta</span>
             </span>
           </Button>
+
+          <Button asChild variant="ghost" className="hidden md:inline-flex">
+            <span onClick={nuevoUsuario} className="flex items-center gap-2 cursor-pointer">
+              <UserPlus2Icon className="size-4" />
+              <span>CrearCuenta</span>
+            </span>
+          </Button>
+
           <Button asChild variant="ghost" size="icon">
             <Link href="/favoritos" aria-label="Favoritos">
               <Heart className="size-5" />
