@@ -168,7 +168,7 @@ const productos = {
 
 export function ProductosPopulares({ isLoading = false }) {
   return (
-    <ProtectedRoute allowedRoles={["guest", "user", "admin"]}>
+    <ProtectedRoute allowedRoles={["guest", "user", "Administrador"]}>
       <div className="w-full p-5 space-y-10">
         {/* SECCIÓN LIBROS - VERSIÓN SIMPLIFICADA */}
         <div>

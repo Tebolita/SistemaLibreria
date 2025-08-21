@@ -1,22 +1,27 @@
-import { MenuPrincipal } from "@/components/MenuPrincipal";
+"use client";
 import { FProducto } from "@/components/FProducto";
-
+import { MenuAdministrador }   from "@/components/MenuAdministrador";
+import { NavBar } from "@/components/CarrouselYNavBar";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 export default function productos() {
 
   
 
   return (
-    <div className="h-screen">
-      <div>
-        <MenuPrincipal/>
-      </div>
-      <div className='flex'>
-        <div className='w-1/6 bg-blue-500'></div>
-        <div className='w-5/6 p-6'>
-         <FProducto/>
+      <ProtectedRoute allowedRoles={["Administrador"]}> 
+        <div className="h-screen">
+          <div>
+            <NavBar/>
+          </div>
+          <div className='flex'>
+            <div className="h-[calc(90vh)]">
+              <MenuAdministrador/>
+            </div>
+            <div className='w-5/6 p-6'>
+            <FProducto/>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    
+      </ProtectedRoute>
   );
 }

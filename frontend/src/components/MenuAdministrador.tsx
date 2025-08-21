@@ -1,47 +1,65 @@
-import {Calculator,Calendar,CreditCard,Settings,Smile,User,} from "lucide-react"
+import {Package, PackageSearch, PackageMinus, PackageOpen,
+  BookPlus, BookOpen, BookMinus, BookMarked
+} from "lucide-react"
 import {Command,CommandEmpty,CommandGroup,CommandInput,CommandItem,CommandList,CommandSeparator,CommandShortcut,} from "@/components/ui/command"
+import { useRouter } from "next/navigation";
+
+const Menus = [
+  {
+    Titulo: "Producto",
+    SubMenus: [
+      { Icon: <Package />, Titulo: "Agregar Producto", ruta: "/agregarproducto" },
+      { Icon: <PackageSearch />, Titulo: "Buscar Producto", ruta: "/buscarproducto" },
+      { Icon: <PackageMinus />, Titulo: "Eliminar Producto", ruta: "/eliminarproducto" },
+      { Icon: <PackageOpen />, Titulo: "Actualizar Producto", ruta: "/actualizarproducto" },
+      { Icon: <PackageOpen />, Titulo: "Mostrar Productos", ruta: "/mostrarproductos" }
+    ]
+  },
+  {
+    Titulo: "Categoria",
+    SubMenus: [
+      { Icon: <BookPlus />, Titulo: "Agregar Categoria", ruta: "/agregarcategoria" },
+      { Icon: <BookOpen />, Titulo: "Buscar Categoria", ruta: "/buscarcategoria" },
+      { Icon: <BookMinus />, Titulo: "Eliminar Categoria", ruta: "/eliminarcategoria" },
+      { Icon: <BookMarked />, Titulo: "Actualizar Categoria", ruta: "/actualizarcategoria" },
+      { Icon: <BookOpen />, Titulo: "Mostrar Categoria", ruta: "/mostrarcategoria" }
+    ]
+  },  
+];
 
 
 export function MenuAdministrador() {
 
+    const router = useRouter();
+    const Redireccionar = (ruta: string) => {
+      router.push(ruta);
+    };
+    
     return (
       <>
-      <Command className="rounded-lg border shadow-md md:min-w-[450px]">
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
+      <Command className="rounded-lg border shadow-md md:min-w-[450px] h-full bg-gray-800 text-white">
+        <CommandInput placeholder="Type a command or search..." className="h-full"  />
+        <CommandList className="min-h-[400px] max-h-[100vh] w-full">
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem disabled>
-              <Calculator />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
+          
+          {Menus.map((menu) => (
+            <>
+              <CommandGroup key={menu.Titulo} heading={menu.Titulo}>
+                
+                {menu.SubMenus.map((subMenu, index) => (
+                  <CommandItem key={index} className="cursor-pointer text-white hover:bg-gray-700" onClick={() => Redireccionar(subMenu.ruta)} >
+                    {subMenu.Icon}
+                    <span onClick={() => Redireccionar(subMenu.ruta)}>{subMenu.Titulo}</span>
+                    <CommandShortcut>⌘{index + 1}</CommandShortcut>
+                  </CommandItem>
+                ),
+                )}
+              </CommandGroup>
+              <CommandSeparator/>
+            </>
+          ))}
+            
+          
         </CommandList>
       </Command>
     </>

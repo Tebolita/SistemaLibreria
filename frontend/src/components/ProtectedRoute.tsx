@@ -10,13 +10,15 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ allowedRoles, children }: ProtectedRouteProps) {
   const router = useRouter();
-  const role = useUserRole(); // Llama el hook directamente
+  const { role, loading } = useUserRole();
 
   useEffect(() => {
-    if (!allowedRoles.includes(role)) {
+    if (!loading && !allowedRoles.includes(role)) {
       router.replace("/no-autorizado");
     }
-  }, [role, allowedRoles, router]);
+  }, [role, allowedRoles, router, loading]);
+
+  if (loading) return null; // o un loader
 
   return allowedRoles.includes(role) ? <>{children}</> : null;
 }
