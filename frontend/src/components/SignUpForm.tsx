@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ShoppingBagIcon, LucidePackageSearch, Package, ClipboardClockIcon } from "lucide-react"
-import { Register } from "@/app/login.api"
+import { Register } from "@/Apis/login.api"
 import { toast, Toaster } from "sonner"
 
 export function SignUpForm() {

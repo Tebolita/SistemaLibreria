@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation'
 export function MenuPrincipal() {
     const [ShowLogin, setShowLogin] = useState("hidden");
     const [ShowSignUp, setShowSignUp] = useState("hidden");
-    const [showLocation, setShowLocation] = useState(false);
 
     const router = useRouter();
 

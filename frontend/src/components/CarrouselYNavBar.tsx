@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { use, useEffect, useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ShoppingCart, User, Search, Menu, Heart, UserPlus2Icon } from "lucide-react"
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { LoginForm } from "./LoginForm"
 import { useRouter } from "next/navigation"
-
+import { ObtenerCategorias, Categorias } from "@/Apis/Categorias.api"
 
 
 const slides = [
@@ -39,6 +39,8 @@ const slides = [
   },
 ]
 
+
+
 // ====== NAV CATEGORIES ======
 const categories = [
   { name: "Nuevos", href: "/nuevos" },
@@ -60,6 +62,16 @@ function NavBar() {
   const nuevoUsuario = () => {
     router.push("/nuevousuario");
   };  
+
+  const [DataCategoria, setDataCategoria] = useState<Categorias[]>([]);
+
+  useEffect(() => {
+    async function GetCategorias() {
+      const categorias = await ObtenerCategorias();
+      setDataCategoria(categorias);
+    }
+    GetCategorias();
+  }, []);
   return (
     <>      
     <header className="w-full border-b">
@@ -70,8 +82,8 @@ function NavBar() {
             <Menu className="size-5" />
           </Button>
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-black" />
-            <span className="font-semibold tracking-tight">Librería</span>
+            <img src="https://img.lovepik.com/png/20231006/Creative-three-dimensional-book-store-reading-characters-reading-book-stereoscopic_100280_wh860.png" className="h-8 w-8 rounded-xl" />
+            <span className="font-semibold tracking-tight">Librería SPD</span>
           </Link>
         </div>
 
@@ -124,9 +136,9 @@ function NavBar() {
 
       {/* Categories */}
       <nav className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-3 pb-2 md:flex">
-        {categories.map((c) => (
-          <Button key={c.href} asChild variant="ghost" className="text-sm">
-            <Link href={c.href}>{c.name}</Link>
+        {DataCategoria.map((c) => (
+          <Button key={c.Nombre} asChild variant="ghost" className="text-sm">
+            <Link href={c.Nombre}>{c.Nombre}</Link>
           </Button>
         ))}
       </nav>
@@ -222,12 +234,5 @@ function HeroCarousel() {
   )
 }
 
-// ====== PÁGINA ======
-export default function PortadaPage() {
-  return (
-    <main className=" bg-white">
-      <NavBar />
-      <HeroCarousel />
-    </main>
-  )
-}
+
+export { NavBar, HeroCarousel }

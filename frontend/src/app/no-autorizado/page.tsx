@@ -8,7 +8,6 @@ export default function NoAutorizadoPage() {
     const router = useRouter();
 
     const regresarInicio = () => {
-        Cookies.remove("authToken");
         router.push("/");
     };
 

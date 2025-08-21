@@ -1,12 +1,13 @@
 
 import { MenuPrincipal } from "@/components/MenuPrincipal";
 import { ProductosPopulares } from "@/components/ProductosPopulares";
-import HeroCarousel from "@/components/Carrousel";
+import { NavBar, HeroCarousel } from "@/components/CarrouselYNavBar";
 
 export default function Home() {
   return (
     <>
     {/* <MenuPrincipal/> */}
+    <NavBar />
     <HeroCarousel />
     <ProductosPopulares/>
    </>

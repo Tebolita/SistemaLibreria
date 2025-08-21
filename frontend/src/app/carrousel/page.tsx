@@ -1,6 +1,6 @@
 "use client"
 
-import Carrousel from "@/components/Carrousel"
+import Carrousel from "@/components/CarrouselYNavBar"
 
 export default function CarrouselPage() {
   return (
