@@ -4,13 +4,12 @@ import { use, useEffect, useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ShoppingCart, User, Search, Menu, Heart, UserPlus2Icon } from "lucide-react"
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { LoginForm } from "./LoginForm"
 import { useRouter } from "next/navigation"
 import { ObtenerCategorias, Categorias } from "@/Apis/Categorias.api"
-
+import  { useLogin } from "@/context/loginContext"
 
 const slides = [
   {
@@ -54,9 +53,10 @@ const categories = [
 
 // ====== NAVBAR ======
 function NavBar() {
-  const [ShowLogin, setShowLogin] = useState("hidden");
+ 
+  const { showLoginForm, setshowLoginForm, nombreUsuario, setNombreUsuario  } = useLogin();
   const toggleLogin = () => {
-      setShowLogin(prev => prev === "" ? "hidden" : "");
+      setshowLoginForm(!showLoginForm);
   };
   const router = useRouter();
   const nuevoUsuario = () => {
@@ -107,7 +107,7 @@ function NavBar() {
           <Button asChild variant="ghost" className="hidden md:inline-flex">
             <span onClick={toggleLogin} className="flex items-center gap-2 cursor-pointer">
               <User className="size-4" />
-              <span>Cuenta</span>
+              <span>{nombreUsuario ? "Bienvenido: " + nombreUsuario : "Cuenta" }</span>
             </span>
           </Button>
 
@@ -142,11 +142,9 @@ function NavBar() {
           </Button>
         ))}
       </nav>
-    <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute" style={{ zIndex: 100 }}>
-        <Card className={`w-full max-w-sm ml-auto mr-[15%] absolute ${ShowLogin}`}>
-            <LoginForm />
-        </Card>  
-    </div> 
+
+      {showLoginForm && <LoginForm />}
+
       {/* Mobile search */}
       <div className="px-3 pb-3 md:hidden">
         <form

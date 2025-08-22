@@ -10,9 +10,6 @@ export default function productos() {
   return (
       <ProtectedRoute allowedRoles={["Administrador"]}> 
         <div className="h-screen">
-          <div>
-            <NavBar/>
-          </div>
           <div className='flex'>
             <div className="h-[calc(90vh)]">
               <MenuAdministrador/>

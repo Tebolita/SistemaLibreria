@@ -1,8 +1,11 @@
 import {Package, PackageSearch, PackageMinus, PackageOpen,
-  BookPlus, BookOpen, BookMinus, BookMarked
+  BookPlus, BookOpen, BookMinus, BookMarked,
+  LogOut
 } from "lucide-react"
 import {Command,CommandEmpty,CommandGroup,CommandInput,CommandItem,CommandList,CommandSeparator,CommandShortcut,} from "@/components/ui/command"
 import { useRouter } from "next/navigation";
+import React from "react";
+import Cookies from "js-cookie";
 
 const Menus = [
   {
@@ -25,6 +28,12 @@ const Menus = [
       { Icon: <BookOpen />, Titulo: "Mostrar Categoria", ruta: "/mostrarcategoria" }
     ]
   },  
+  {
+    Titulo: "Salir",
+    SubMenus: [
+      { Icon: <LogOut />, Titulo: "Cerrar Sesion", ruta: "/", },
+    ]
+  },    
 ];
 
 
@@ -32,6 +41,9 @@ export function MenuAdministrador() {
 
     const router = useRouter();
     const Redireccionar = (ruta: string) => {
+      if (ruta === "/") {
+        Cookies.remove("authToken");
+      }      
       router.push(ruta);
     };
     
@@ -43,7 +55,7 @@ export function MenuAdministrador() {
           <CommandEmpty>No results found.</CommandEmpty>
           
           {Menus.map((menu) => (
-            <>
+            <React.Fragment key={menu.Titulo}>
               <CommandGroup key={menu.Titulo} heading={menu.Titulo}>
                 
                 {menu.SubMenus.map((subMenu, index) => (
@@ -56,7 +68,7 @@ export function MenuAdministrador() {
                 )}
               </CommandGroup>
               <CommandSeparator/>
-            </>
+            </React.Fragment>
           ))}
             
           
