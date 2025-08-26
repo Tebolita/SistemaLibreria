@@ -5,10 +5,12 @@ import { FilesModule } from './files/files.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { CategoriasModule } from './categorias/categorias.module';
+import { ProductosModule } from './productos/productos.module';
+
 
 
 @Module({
-  imports: [AuthModule, FilesModule, UsersModule, RolesModule, CategoriasModule],
+  imports: [AuthModule, FilesModule, UsersModule, RolesModule, ProductosModule, CategoriasModule],
   controllers: [],
   providers: [PrismaService],
 })

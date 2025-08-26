@@ -1,8 +1,18 @@
 "use client"
 
+import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -117,13 +127,24 @@ export function FProducto() {
           control={form.control}
           name="categoria"
           render={({ field }) => (
+            <>
             <FormItem>
-              <FormLabel>Ingrese la categoria del producto:</FormLabel>
-              <FormControl>
-                <Input placeholder="categoria" {...field} />
-              </FormControl>
+              <FormLabel>Seleccione la categoria del producto:</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccione la categoría del producto" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="Libro">Libro</SelectItem>
+                  <SelectItem value="Miselanea">Miselanea</SelectItem>
+                  <SelectItem value="Papelería">Papelería</SelectItem>
+                </SelectContent> 
+              </Select>
               <FormMessage />
             </FormItem>
+            </>
           )}
         />
         <FormField
@@ -131,10 +152,19 @@ export function FProducto() {
           name="proveedor"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Ingrese el nombre del proveedor:</FormLabel>
-              <FormControl>
-                <Input placeholder="proveedor" {...field} />
-              </FormControl>
+              <FormLabel>Seleccione el nombre del proveedor del producto:</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccione el nombre del proveedor del producto" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="BIC">BIC</SelectItem>
+                  <SelectItem value="Pilot">Pilot</SelectItem>
+                  <SelectItem value="SUSAETA">SUSAETA</SelectItem>
+                </SelectContent> 
+              </Select>
               <FormMessage />
             </FormItem>
           )}

@@ -5,8 +5,6 @@ import { NavBar } from "@/components/CarrouselYNavBar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 export default function productos() {
 
-  
-
   return (
       <ProtectedRoute allowedRoles={["Administrador"]}> 
         <div className="h-screen">
