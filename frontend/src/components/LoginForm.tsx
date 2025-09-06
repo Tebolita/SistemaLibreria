@@ -37,8 +37,8 @@ export function LoginForm() {
           if (userEmail.role === "Administrador") {
             router.push("/producto");
           }
-        toast.success("Inicio de sesión exitoso", { duration: 3000 })
-
+          toast.success("Inicio de sesión exitoso", { duration: 3000 })
+          setshowLoginForm(!showLoginForm);
         } else if (res.message) {
           toast.error(res.message || "Credenciales incorrectas", { duration: 3000 })
         }

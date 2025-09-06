@@ -1,15 +1,5 @@
 
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Request,
-  UseGuards,
-  UseInterceptors,
-  UploadedFile
+import {Body,Controller,Get,HttpCode,HttpStatus,Post,Request,UseGuards,UseInterceptors,UploadedFile
 } from '@nestjs/common';
 import { AuthGuard } from './guard/auth.guard';
 import { AuthService } from './auth.service';

@@ -1,6 +1,7 @@
 import {Package, PackageSearch, PackageMinus, PackageOpen,
   BookPlus, BookOpen, BookMinus, BookMarked,
-  LogOut
+  LogOut,
+  ImagePlus, ImageMinus, ImageUpscaleIcon, ImagePlayIcon 
 } from "lucide-react"
 import {Command,CommandEmpty,CommandGroup,CommandInput,CommandItem,CommandList,CommandSeparator,CommandShortcut,} from "@/components/ui/command"
 import { useRouter } from "next/navigation";
@@ -27,7 +28,16 @@ const Menus = [
       { Icon: <BookMarked />, Titulo: "Actualizar Categoria", ruta: "/actualizarcategoria" },
       { Icon: <BookOpen />, Titulo: "Mostrar Categoria", ruta: "/mostrarcategoria" }
     ]
-  },  
+  }, 
+  {
+    Titulo: "Configuraciones",
+    SubMenus: [
+      { Icon: <ImagePlus />, Titulo: "Agregar Banner", ruta: "/agregarBanner" },
+      { Icon: <ImageMinus />, Titulo: "Eliminar Banner", ruta: "/eliminarBanner" },
+      { Icon: <ImagePlayIcon />, Titulo: "Actualizar Banner", ruta: "/actualizarBanner" },
+      { Icon: <ImageUpscaleIcon />, Titulo: "Mostrar banners", ruta: "/mostrarBanner" }      
+    ]
+  }, 
   {
     Titulo: "Salir",
     SubMenus: [

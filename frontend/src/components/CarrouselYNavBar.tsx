@@ -36,19 +36,18 @@ const slides = [
     ctaHref: "/accesorios",
     bg: "bg-[url('https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif')]",
   },
+  {
+    id: "promo-4",
+    title: "Descuentos en Libros Infantiles",
+    subtitle: "10%, 20% y 30% OFF en títulos seleccionados",
+    ctaLabel: "Ver ofertas",
+    ctaHref: "/LibrosInfantiles",
+    bg: "bg-[url('https://i.pinimg.com/originals/8e/91/24/8e9124b560a7927ab61206bc466f14e6.gif')]",
+  },  
 ]
 
 
 
-// ====== NAV CATEGORIES ======
-const categories = [
-  { name: "Nuevos", href: "/nuevos" },
-  { name: "Ofertas", href: "/ofertas" },
-  { name: "Best Sellers", href: "/best-sellers" },
-  { name: "Universitarios", href: "/universitarios" },
-  { name: "Infantil", href: "/infantil" },
-  { name: "Papelería", href: "/papeleria" },
-]
 
 
 // ====== NAVBAR ======
@@ -138,7 +137,7 @@ function NavBar() {
       <nav className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-3 pb-2 md:flex">
         {DataCategoria.map((c) => (
           <Button key={c.Nombre} asChild variant="ghost" className="text-sm">
-            <Link href={c.Nombre}>{c.Nombre}</Link>
+            <Link href={"/categorias/" + c.Nombre}>{c.Nombre}</Link>
           </Button>
         ))}
       </nav>
@@ -187,7 +186,7 @@ function HeroCarousel() {
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+               transition={{ duration: 0.6 }}
           >
             <div className="max-w-xl space-y-3 rounded-2xl bg-white/80 p-6 backdrop-blur-sm">
               <h2 className="text-2xl font-bold tracking-tight md:text-4xl">
