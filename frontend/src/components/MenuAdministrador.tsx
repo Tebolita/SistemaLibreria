@@ -12,6 +12,7 @@ const Menus = [
   {
     Titulo: "Producto",
     SubMenus: [
+      { Icon: <Package />, Titulo: "Producto", ruta: "/producto" },
       { Icon: <Package />, Titulo: "Agregar Producto", ruta: "/agregarproducto" },
       { Icon: <PackageSearch />, Titulo: "Buscar Producto", ruta: "/buscarproducto" },
       { Icon: <PackageMinus />, Titulo: "Eliminar Producto", ruta: "/eliminarproducto" },
