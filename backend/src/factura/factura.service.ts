@@ -10,14 +10,41 @@ export class FacturaService {
 
   async create(createFacturaDto: CreateFacturaDto) {
     const facturaCreada = await this.prismaService.facturas.create({
-      data: createFacturaDto
+      data: {
+        ...createFacturaDto,
+        Clientes: {
+          connect: {IdCliente: createFacturaDto.Cliente}
+        },
+        Usuarios: {
+          connect: {IdUsuario: createFacturaDto.Usuario}
+        },
+        MetodosPago: {
+          connect: {IdMetodoPago: createFacturaDto.MetodoPago}
+        },
+      }
+
     })
 
     return {message: "Factura creada", id: facturaCreada.IdFactura}
   }
 
   async findAll() {
-    return await this.prismaService.facturas.findMany()
+    return await this.prismaService.facturas.findMany({
+      select: {
+        Clientes: {
+          select: {
+            NombreCompleto: true
+          }
+        },
+        Fecha: true,
+        Total: true,
+        MetodosPago: {
+          select: {
+            Metodo: true
+          }
+        }
+      }
+    })
   }
 
 
@@ -25,7 +52,21 @@ export class FacturaService {
     return await this.prismaService.facturas.findUnique({
       where: {
         IdFactura: id
-      }
+      },
+      select: {
+        Clientes: {
+          select: {
+            NombreCompleto: true
+          }
+        },
+        Fecha: true,
+        Total: true,
+        MetodosPago: {
+          select: {
+            Metodo: true
+          }
+        }
+      }      
     })
   }
 

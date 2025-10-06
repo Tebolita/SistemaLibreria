@@ -38,6 +38,18 @@ model DetalleFactura {
   Productos      Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdPro__4E88ABD4")
 }
 
+model Estanteria {
+  idEstanteria                                                            Int                     @id(map: "PK__Estanterias__42B66742FAE5FAE9") @default(autoincrement())
+  Nombre                                                                  String?                 @db.VarChar(100)
+  Ubicacion                                                               String?                 @db.Text
+  Encargado                                                               String?                 @db.VarChar(100)
+  DetalleFactura                                                          DetalleFactura[]
+  InventarioEstanteria                                                    InventarioEstanteria[]
+  MovimientosEstanteria                                                   MovimientosEstanteria[]
+  TrasladosEstanteria_TrasladosEstanteria_IdEstanteriaOrigenToEstanteria  TrasladosEstanteria[]   @relation("TrasladosEstanteria_IdEstanteriaOrigenToEstanteria")
+  TrasladosEstanteria_TrasladosEstanteria_IdEstanteriaDestinoToEstanteria TrasladosEstanteria[]   @relation("TrasladosEstanteria_IdEstanteriaDestinoToEstanteria")
+}
+
 model Facturas {
   IdFactura      Int              @id(map: "PK__Facturas__50E7BAF18149C1A2") @default(autoincrement())
   IdCliente      Int?
@@ -51,10 +63,44 @@ model Facturas {
   Usuarios       Usuarios?        @relation(fields: [IdUsuario], references: [IdUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdUsua__49C3F6B7")
 }
 
+model InventarioEstanteria {
+  IdInventario Int         @id(map: "PK__Inventar__1927B20CE0233D6E") @default(autoincrement())
+  IdProducto   Int?
+  IdEstanteria Int?
+  Cantidad     Int?
+  Estanteria   Estanteria? @relation(fields: [IdEstanteria], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Inventari__IdBod__60A75C0F")
+  Productos    Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Inventari__IdPro__5FB337D6")
+}
+
+model Kardex {
+  IdKardex       Int       @id(map: "PK__Kardex__BC1BA400B47CB259") @default(autoincrement())
+  IdProducto     Int
+  Fecha          DateTime? @default(now(), map: "DF__Kardex__Fecha__74AE54BC") @db.DateTime
+  TipoMovimiento String?   @db.VarChar(20)
+  Cantidad       Int
+  PrecioUnitario Decimal   @db.Decimal(10, 2)
+  StockAnterior  Int
+  StockActual    Int
+  Descripcion    String?   @db.VarChar(255)
+  Productos      Productos @relation(fields: [IdProducto], references: [IdProducto], onUpdate: NoAction, map: "FK__Kardex__IdProduc__76969D2E")
+}
+
 model MetodosPago {
   IdMetodoPago Int        @id(map: "PK__MetodosP__6F49A9BE73136A63") @default(autoincrement())
   Metodo       String?    @db.VarChar(50)
   Facturas     Facturas[]
+}
+
+model MovimientosEstanteria {
+  IdMovimiento   Int         @id(map: "PK__Movimien__881A6AE0E1ABD81B") @default(autoincrement())
+  Fecha          DateTime?   @db.DateTime
+  TipoMovimiento String?     @db.VarChar(20)
+  Cantidad       Int?
+  IdProducto     Int?
+  IdEstanteria   Int?
+  Observaciones  String?     @db.Text
+  Estanteria     Estanteria? @relation(fields: [IdEstanteria], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Movimient__IdBod__6477ECF3")
+  Productos      Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Movimient__IdPro__6383C8BA")
 }
 
 model Productos {
@@ -65,8 +111,11 @@ model Productos {
   Stock                 Int?
   IdCategoria           Int?
   IdProveedor           Int?
+  Estado                Boolean                 @default(true, map: "DF__Productos__Estad__70DDC3D8")
+  Imagen                String?                 @db.VarChar(255)
   DetalleFactura        DetalleFactura[]
   InventarioEstanteria  InventarioEstanteria[]
+  Kardex                Kardex[]
   MovimientosEstanteria MovimientosEstanteria[]
   Categorias            Categorias?             @relation(fields: [IdCategoria], references: [IdCategoria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Productos__IdCat__4316F928")
   Proveedores           Proveedores?            @relation(fields: [IdProveedor], references: [IdProveedor], onDelete: NoAction, onUpdate: NoAction, map: "FK__Productos__IdPro__440B1D61")
@@ -99,51 +148,6 @@ model sysdiagrams {
   @@unique([principal_id, name], map: "UK_principal_name")
 }
 
-model Usuarios {
-  IdUsuario  Int        @id(map: "PK__Usuarios__5B65BF978C2216F6") @default(autoincrement())
-  Nombre     String?    @db.VarChar(100)
-  Usuario    String?    @unique(map: "UQ__Usuarios__E3237CF78EC09F9E") @db.VarChar(50)
-  Contrasena String?    @db.VarChar(100)
-  IdRol      Int?
-  Correo     String?    @db.VarChar(100)
-  Estado     Boolean    @default(true, map: "DF__Usuarios__Estado__71D1E811")
-  Facturas   Facturas[]
-  Roles      Roles?     @relation(fields: [IdRol], references: [IdRol], onDelete: NoAction, onUpdate: NoAction, map: "FK__Usuarios__IdRol__3A81B327")
-}
-
-model Estanteria {
-  idEstanteria                                                            Int                     @id(map: "PK__Estanterias__42B66742FAE5FAE9") @default(autoincrement())
-  Nombre                                                                  String?                 @db.VarChar(100)
-  Ubicacion                                                               String?                 @db.Text
-  Encargado                                                               String?                 @db.VarChar(100)
-  DetalleFactura                                                          DetalleFactura[]
-  InventarioEstanteria                                                    InventarioEstanteria[]
-  MovimientosEstanteria                                                   MovimientosEstanteria[]
-  TrasladosEstanteria_TrasladosEstanteria_IdEstanteriaOrigenToEstanteria  TrasladosEstanteria[]   @relation("TrasladosEstanteria_IdEstanteriaOrigenToEstanteria")
-  TrasladosEstanteria_TrasladosEstanteria_IdEstanteriaDestinoToEstanteria TrasladosEstanteria[]   @relation("TrasladosEstanteria_IdEstanteriaDestinoToEstanteria")
-}
-
-model InventarioEstanteria {
-  IdInventario Int         @id(map: "PK__Inventar__1927B20CE0233D6E") @default(autoincrement())
-  IdProducto   Int?
-  IdEstanteria Int?
-  Cantidad     Int?
-  Estanteria   Estanteria? @relation(fields: [IdEstanteria], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Inventari__IdBod__60A75C0F")
-  Productos    Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Inventari__IdPro__5FB337D6")
-}
-
-model MovimientosEstanteria {
-  IdMovimiento   Int         @id(map: "PK__Movimien__881A6AE0E1ABD81B") @default(autoincrement())
-  Fecha          DateTime?   @db.DateTime
-  TipoMovimiento String?     @db.VarChar(20)
-  Cantidad       Int?
-  IdProducto     Int?
-  IdEstanteria   Int?
-  Observaciones  String?     @db.Text
-  Estanteria     Estanteria? @relation(fields: [IdEstanteria], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Movimient__IdBod__6477ECF3")
-  Productos      Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Movimient__IdPro__6383C8BA")
-}
-
 model TrasladosEstanteria {
   IdTraslado                                                     Int         @id(map: "PK__Traslado__9FEFD23CFE47C91C") @default(autoincrement())
   IdProducto                                                     Int?
@@ -155,4 +159,16 @@ model TrasladosEstanteria {
   Estanteria_TrasladosEstanteria_IdEstanteriaOrigenToEstanteria  Estanteria? @relation("TrasladosEstanteria_IdEstanteriaOrigenToEstanteria", fields: [IdEstanteriaOrigen], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Traslados__IdBod__68487DD7")
   Estanteria_TrasladosEstanteria_IdEstanteriaDestinoToEstanteria Estanteria? @relation("TrasladosEstanteria_IdEstanteriaDestinoToEstanteria", fields: [IdEstanteriaDestino], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__Traslados__IdBod__693CA210")
   Productos                                                      Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__Traslados__IdPro__6754599E")
+}
+
+model Usuarios {
+  IdUsuario  Int        @id(map: "PK__Usuarios__5B65BF978C2216F6") @default(autoincrement())
+  Nombre     String?    @db.VarChar(100)
+  Usuario    String?    @unique(map: "UQ__Usuarios__E3237CF78EC09F9E") @db.VarChar(50)
+  Contrasena String?    @db.VarChar(100)
+  IdRol      Int?
+  Correo     String?    @db.VarChar(100)
+  Estado     Boolean    @default(true, map: "DF__Usuarios__Estado__71D1E811")
+  Facturas   Facturas[]
+  Roles      Roles?     @relation(fields: [IdRol], references: [IdRol], onDelete: NoAction, onUpdate: NoAction, map: "FK__Usuarios__IdRol__3A81B327")
 }

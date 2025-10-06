@@ -1,24 +1,17 @@
 import { IsNumber } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateDetalleFacturaDto {
-    @ApiProperty()
-    @IsNumber()
-    IdFactura:number
-
+export class CreateInventarioEstanteriaDto {
     @ApiProperty()
     @IsNumber()
     IdProducto: number
 
     @ApiProperty()
     @IsNumber()
-    Cantidad: number
+    IdEstanteria: number
     
     @ApiProperty()
     @IsNumber()
-    PrecioUnitario: number    
+    Cantidad: number
 
-    @ApiProperty()
-    @IsNumber()
-    SubTotal: number        
 }

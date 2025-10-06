@@ -1,31 +1,28 @@
-import { IsDate, IsDecimal, IsNumber, MinLength } from "class-validator";
+import { IsDate, IsNumber, MinLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 
 
 export class CreateFacturaDto {
     @ApiProperty()
     @IsNumber()
-    @MinLength(1)
-    IdCliente: number
+    Cliente: number
 
     @ApiProperty()
+    @Type(() => Date)
     @IsDate()
-    @MinLength(1)
     Fecha: Date
 
     @ApiProperty()
-    @IsDecimal()
-    @MinLength(1)
+    @IsNumber()
     Total: number
 
     @ApiProperty()
     @IsNumber()
-    @MinLength(1)
-    IdUsuario: number
+    Usuario: number
 
     @ApiProperty()
     @IsNumber()
-    @MinLength(1)
-    IdMedioPago: number
+    MetodoPago: number
 
 }
