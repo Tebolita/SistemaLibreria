@@ -11,16 +11,7 @@ export class FacturaService {
   async create(createFacturaDto: CreateFacturaDto) {
     const facturaCreada = await this.prismaService.facturas.create({
       data: {
-        ...createFacturaDto,
-        Clientes: {
-          connect: {IdCliente: createFacturaDto.Cliente}
-        },
-        Usuarios: {
-          connect: {IdUsuario: createFacturaDto.Usuario}
-        },
-        MetodosPago: {
-          connect: {IdMetodoPago: createFacturaDto.MetodoPago}
-        },
+        ...createFacturaDto
       }
 
     })

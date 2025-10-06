@@ -6,7 +6,7 @@ import { Type } from "class-transformer";
 export class CreateFacturaDto {
     @ApiProperty()
     @IsNumber()
-    Cliente: number
+    IdCliente: number
 
     @ApiProperty()
     @Type(() => Date)
@@ -19,10 +19,10 @@ export class CreateFacturaDto {
 
     @ApiProperty()
     @IsNumber()
-    Usuario: number
+    IdUsuario: number
 
     @ApiProperty()
     @IsNumber()
-    MetodoPago: number
+    IdMetodoPago: number
 
 }
