@@ -11,6 +11,7 @@ model Categorias {
   IdCategoria Int         @id(map: "PK__Categori__A3C02A10F823D555") @default(autoincrement())
   Nombre      String?     @db.VarChar(50)
   Descripcion String?     @db.Text
+  Estado      Boolean     @default(true, map: "DF__Categoria__Estad__6FE99F9F")
   Productos   Productos[]
 }
 
@@ -20,6 +21,7 @@ model Clientes {
   Correo         String?    @db.VarChar(100)
   Telefono       String?    @db.VarChar(20)
   Direccion      String?    @db.Text
+  Estado         Boolean    @default(true, map: "DF__Clientes__Estado__6E01572D")
   Facturas       Facturas[]
 }
 
@@ -77,6 +79,7 @@ model Proveedores {
   Contacto      String?     @db.VarChar(100)
   Telefono      String?     @db.VarChar(20)
   Correo        String?     @db.VarChar(100)
+  Estado        Boolean     @default(true, map: "DF__Proveedor__Estad__6EF57B66")
   Productos     Productos[]
 }
 
@@ -103,6 +106,7 @@ model Usuarios {
   Contrasena String?    @db.VarChar(100)
   IdRol      Int?
   Correo     String?    @db.VarChar(100)
+  Estado     Boolean    @default(true, map: "DF__Usuarios__Estado__71D1E811")
   Facturas   Facturas[]
   Roles      Roles?     @relation(fields: [IdRol], references: [IdRol], onDelete: NoAction, onUpdate: NoAction, map: "FK__Usuarios__IdRol__3A81B327")
 }

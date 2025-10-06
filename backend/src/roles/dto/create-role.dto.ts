@@ -1,11 +1,7 @@
 import { IsString, MinLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { Roles } from "@prisma/client";
 
-export type CreateRoleDto = Omit <Roles, 'IdRol' | 'createdAt' | 'updatedAt'>;
-
-
-export class ValidateRoleDto {
+export class CreateRoleDto {
     @IsString()
     @MinLength(3)
     @ApiProperty()

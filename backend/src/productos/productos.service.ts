@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ValidateProductoDto } from './dto/create-producto.dto';
+import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -9,29 +9,79 @@ export class ProductosService {
   
   constructor(private prismaService: PrismaService) {}
   
-  async create(createProductoDto: ValidateProductoDto) {
+  async create(createProductoDto: CreateProductoDto) {
     await this.prismaService.productos.create({
       data: {
       ...createProductoDto,
-      Precio: new Decimal(createProductoDto.Precio), // Conversión aquí
+      Precio: new Decimal(createProductoDto.Precio ? createProductoDto.Precio : 0),
+      Estado: true
     },
     });
     return {message: 'Producto Creado'};
   }
 
-  findAll() {
-    return `This action returns all productos`;
+  async obtenerTodosLosProductos() {
+   return await this.prismaService.productos.findMany()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} producto`;
+  async obtenerUnProducto(id: number) {
+    return await this.prismaService.productos.findUnique({
+      where: {IdProducto: id}
+    });
   }
 
-  update(id: number, updateProductoDto: UpdateProductoDto) {
-    return `This action updates a #${id} producto`;
+  async actualizarProducto(id: number, updateProductoDto: UpdateProductoDto) {
+    await this.prismaService.productos.update({
+      where: {
+        IdProducto: id
+      },
+      data: { 
+        ...updateProductoDto
+      }
+    })
+
+    return {message: `Producto ${updateProductoDto.Nombre} actualizado de manera correcta`}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} producto`;
+  async desactivarProducto(id: number) {
+    const estadoActual = await this.obtenerUnProducto(id) 
+    await this.prismaService.productos.update({
+      where: {
+        IdProducto: id
+      },
+      data: {
+        Estado: !estadoActual?.Estado
+      }
+    })
+
+    return {message: `Se cambio el estado del producto`}
   }
+
+  async productosPorCategoria(idCategoria: number){
+    return await this.prismaService.productos.findMany({
+      where : {
+        IdCategoria: idCategoria
+      }
+    })
+  }
+
+  async searchByText(texto: string){
+    return await this.prismaService.productos.findMany({
+      where: {
+        OR: [
+          { Nombre: { contains: texto } },
+          { Descripcion: { contains: texto } },
+        ]
+      }
+    })
+  }
+
+  async obtenerTodosLosProductosActivos() {
+   return await this.prismaService.productos.findMany({
+    where: {
+      Estado: true
+    }
+   })
+  }
+
 }

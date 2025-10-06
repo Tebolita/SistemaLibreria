@@ -1,5 +1,5 @@
 
-import { IsEmail, IsNumber, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsString, MinLength, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Usuarios } from "@prisma/client";
 import { Transform } from 'class-transformer';
@@ -28,6 +28,11 @@ export class ValidateRegisterDto {
     @ApiProperty()
     Usuario: string;
 
+    @ApiProperty()
+    @IsBoolean()
+    @IsOptional()
+    @MinLength(1)
+    Estado: boolean
 
 
 }

@@ -1,11 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { Categorias } from "@prisma/client"
-import { IsString } from "class-validator";
+import { IsString, IsBoolean, MinLength } from "class-validator";
 
-export type CreateCategoriaDto = Omit<Categorias, 'IdCategoria' | 'createdAt' | 'updatedAt'>;
-
-
-export class ValidateCategoriaDto {
+export class CreateCategoriaDto {
     @IsString()
     @ApiProperty()
     Nombre: string;
@@ -13,4 +9,8 @@ export class ValidateCategoriaDto {
     @IsString()
     @ApiProperty()
     Descripcion: string;
+
+    @ApiProperty()
+    @IsBoolean()
+    Estado: boolean 
 }

@@ -14,7 +14,7 @@ export const etiquetaNuevo = {
 };
 export const etiquetaPopular = {
   Icon: <PartyPopper />,
-  Titulo: "Popular",
+  Titulo: <PartyPopper />,
   color: "bg-yellow-300", // Amarillo para popular
   variant: "outline" as const,
 };

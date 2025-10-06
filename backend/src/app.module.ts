@@ -6,11 +6,15 @@ import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { CategoriasModule } from './categorias/categorias.module';
 import { ProductosModule } from './productos/productos.module';
+import { EstanteriaModule } from './estanteria/estanteria.module';
+import { ClientesModule } from './clientes/clientes.module';
+import { DetalleFacturaModule } from './detalle-factura/detalle-factura.module';
+import { FacturaModule } from './factura/factura.module';
 
 
 
 @Module({
-  imports: [AuthModule, FilesModule, UsersModule, RolesModule, ProductosModule, CategoriasModule],
+  imports: [AuthModule, FilesModule, UsersModule, RolesModule, ProductosModule, CategoriasModule, EstanteriaModule, ClientesModule, DetalleFacturaModule, FacturaModule],
   controllers: [],
   providers: [PrismaService],
 })

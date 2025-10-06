@@ -1,40 +1,42 @@
-import { IsNumber, IsString, Min, MinLength } from "class-validator";
+import { IsNumber, IsString, Min, MinLength, IsBoolean } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { Productos } from "@prisma/client";
 
-export type CreateProductoDto = Omit <Productos, 'IdProducto' | 'createdAt' | 'updatedAt'>;
-
-
-export class ValidateProductoDto {
-    
-    @IsString()
-    @MinLength(1)
+export class CreateProductoDto {
     @ApiProperty()
+    @IsString()
+    @MinLength(1, { message: "El nombre debe de ser mayor a un caracter" })
     Nombre: string;
 
+    @ApiProperty()
     @IsString()
     @MinLength(1)
-    @ApiProperty()
     Descripcion: string;
 
+    @ApiProperty()
     @IsNumber({ allowInfinity: false, allowNaN: false }, { message: 'Precio debe ser un número decimal válido' })
     @Min(0.01, { message: 'Precio debe ser mayor a 0' })
-    @ApiProperty()
     Precio: number;
 
+    @ApiProperty()
     @IsNumber()
     @Min(1)
-    @ApiProperty()
     Stock: number;
 
+    @ApiProperty()
     @IsNumber()
     @Min(1)
-    @ApiProperty()
     IdCategoria: number;
 
+    @ApiProperty()
     @IsNumber()
     @Min(1)
-    @ApiProperty()
     IdProveedor: number;
-}
 
+    @ApiProperty()
+    @IsBoolean()
+    Estado: boolean 
+
+    @ApiProperty()
+    @IsString()
+    Imagen: string
+}

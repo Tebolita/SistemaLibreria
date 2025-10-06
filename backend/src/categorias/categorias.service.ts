@@ -7,27 +7,63 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class CategoriasService {
   constructor(private prismaService: PrismaService) {}
 
-  create(createCategoriaDto: CreateCategoriaDto) {
-    return 'This action adds a new categoria';
+  async create(createCategoriaDto: CreateCategoriaDto) {
+    await this.prismaService.categorias.create({
+      data: {
+        ...createCategoriaDto,
+        Estado: true
+      }
+    })
   }
 
   findAll() {
-    const categorias = this.prismaService.categorias.findMany({select: {
-      Nombre: true,
-      Descripcion: true,
-    }});
+    const categorias = this.prismaService.categorias.findMany();
     return categorias;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} categoria`;
+  async searchByText(texto: string){
+    return await this.prismaService.estanteria.findMany({
+      where: {
+        OR: [
+          { Nombre: { contains: texto } },
+          { Ubicacion: { contains: texto } },
+          { Encargado: { contains: texto } },
+        ]
+      }
+    })
+  }  
+
+  async findOne(id: number) {
+    return await this.prismaService.categorias.findUnique({
+      where: {
+        IdCategoria: id
+      }
+    })
   }
 
-  update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
-    return `This action updates a #${id} categoria`;
+  async update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
+    await this.prismaService.categorias.update({
+      where: {
+        IdCategoria: id
+      },
+      data: {
+        ...updateCategoriaDto
+      }
+    })
+    return {message: 'Se actualizo la categoria de manera correcta'}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} categoria`;
+  async changeState(id: number) {
+    const estadoActual = await this.findOne(id)
+
+    await this.prismaService.categorias.update({
+      where: {
+        IdCategoria: id
+      },
+      data: {
+        Estado: !estadoActual?.Estado
+      }
+    })
+    return {message: 'Se cambio de estado la categoria'}
   }
 }

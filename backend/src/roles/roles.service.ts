@@ -1,43 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ValidateRoleDto } from './dto/create-role.dto';
+import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
   constructor(private prismaService: PrismaService) {}
 
-  async CreateRoles(ValidateRoleDto: ValidateRoleDto) {
+  async create(createRoleDto: CreateRoleDto) {
     await this.prismaService.roles.create({
-      data: ValidateRoleDto,
+      data: createRoleDto
     });
     return {message: 'Rol Creado'};
   }
 
-  findAll() {
-    const roles = this.prismaService.roles.findMany(); 
-    return roles;
+  async findAll() {
+    return await this.prismaService.roles.findMany(); 
   }
 
-  findOne(id: number) {
-    const nombreRol = this.prismaService.roles.findUnique({
+  async findOne(id: number) {
+    return await this.prismaService.roles.findUnique({
       where: { IdRol: id },
       select: {
         NombreRol: true,
       },
     });
-    return nombreRol;
   }
 
-  async  update(id: number, updateRoleDto: UpdateRoleDto) {
+  async update(id: number, updateRoleDto: UpdateRoleDto) {
     await this.prismaService.roles.update({
       where: { IdRol: id },
       data: updateRoleDto,
     });
-    return `This action updates a #${id} role`;
+    return {message: `Rol actualizado`}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async changeState(id: number) {
+    await this.prismaService.roles.update({
+      where: {
+        IdRol: id
+      },
+      data: {
+        NombreRol: "0"
+      }
+    })
+
+    return {message: `Rol desactivado de manera correcta`}
   }
 }

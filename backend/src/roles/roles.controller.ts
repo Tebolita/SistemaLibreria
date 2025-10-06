@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
-import { ValidateRoleDto } from './dto/create-role.dto';
+import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -10,29 +10,29 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  @Post('CreateRoles')
-  CreateRoles(@Body() ValidateRoleDto: ValidateRoleDto) {
-    return this.rolesService.CreateRoles(ValidateRoleDto);
+  @Post('crear')
+  create(@Body() createRoleDto: CreateRoleDto) {
+    return this.rolesService.create(createRoleDto);
   }
 
-  // @UseGuards(AuthGuard)
-  @Get('GetRoles')
+  @Get('todos')
   findAll() {
     return this.rolesService.findAll();
   }
 
-  @Get(':id')
+
+  @Get('unico/:id')
   findOne(@Param('id') id: string) {
     return this.rolesService.findOne(+id);
   }
 
-  @Patch('UpdateRol/:id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
+  @Patch('actualizar/:id')
+  update(@Param('id') id: number, @Body() updateRoleDto: UpdateRoleDto) {
+    return this.rolesService.update(id, updateRoleDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
+  @Patch('cambiarEstado/:id')
+  remove(@Param('id') id: number) {
+    return this.rolesService.changeState(id);
   }
 }
