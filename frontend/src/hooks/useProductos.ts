@@ -14,7 +14,7 @@ export function useProductos(){
             }
             
             const response = await productosService.CrearProducto(dataClean)
-            return response
+            return response ? response : ""
         }
 
         const productosTodos = async () => {

@@ -22,6 +22,7 @@ export class FacturaService {
   async findAll() {
     return await this.prismaService.facturas.findMany({
       select: {
+        IdFactura: true,
         Clientes: {
           select: {
             NombreCompleto: true
@@ -45,6 +46,7 @@ export class FacturaService {
         IdFactura: id
       },
       select: {
+        IdFactura: true,
         Clientes: {
           select: {
             NombreCompleto: true

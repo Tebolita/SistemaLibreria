@@ -9,10 +9,10 @@ export class DetalleFacturaService {
 
   async create(createDetalleFacturaDto: CreateDetalleFacturaDto) {
     await this.prismaService.detalleFactura.create({
-      data: createDetalleFacturaDto
+      data: {...createDetalleFacturaDto}  
     })
 
-    return {message: "Detalle factura creado con éxito"}
+    return {  message: "Detalle factura creado con éxito"};
   }
 
   async findAll() {

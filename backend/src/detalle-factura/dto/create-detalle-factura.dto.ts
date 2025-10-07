@@ -20,5 +20,10 @@ export class CreateDetalleFacturaDto {
 
     @ApiProperty()
     @IsNumber()
-    SubTotal: number        
+    Subtotal: number    
+    
+    @ApiProperty()
+    @IsNumber()
+    IdEstanteria: number   
+
 }
