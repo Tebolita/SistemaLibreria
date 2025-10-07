@@ -8,13 +8,10 @@ export class CategoriasService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createCategoriaDto: CreateCategoriaDto) {
-    await this.prismaService.categorias.create({
-      data: {
-        ...createCategoriaDto,
-        Estado: true
-      }
+    const categoria = await this.prismaService.categorias.create({
+      data: createCategoriaDto
     })
-    return {message: 'Categoria creada de manera correcta'}
+    return {message: 'Categoria creada de manera correcta', data: categoria}
   }
 
   findAll() {
@@ -41,7 +38,7 @@ export class CategoriasService {
   }
 
   async update(id: number, updateCategoriaDto: UpdateCategoriaDto) {
-    await this.prismaService.categorias.update({
+    const categoria = await this.prismaService.categorias.update({
       where: {
         IdCategoria: id
       },
@@ -49,7 +46,7 @@ export class CategoriasService {
         ...updateCategoriaDto
       }
     })
-    return {message: 'Se actualizo la categoria de manera correcta'}
+    return {message: 'Se actualizo la categoria de manera correcta', data: categoria}
   }
 
   async changeState(id: number) {
@@ -63,6 +60,6 @@ export class CategoriasService {
         Estado: !estadoActual?.Estado
       }
     })
-    return {message: 'Se cambio de estado la categoria'}
+    return {message: 'Se cambio de estado la categoria', data: !estadoActual?.Estado}
   }
 }

@@ -31,8 +31,4 @@ export class RolesController {
     return this.rolesService.update(id, updateRoleDto);
   }
 
-  @Patch('cambiarEstado/:id')
-  remove(@Param('id') id: number) {
-    return this.rolesService.changeState(id);
-  }
 }

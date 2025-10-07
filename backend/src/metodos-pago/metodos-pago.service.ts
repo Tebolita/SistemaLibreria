@@ -8,11 +8,11 @@ export class MetodosPagoService {
   constructor(private prismaService: PrismaService){}
 
   async create(createMetodosPagoDto: CreateMetodosPagoDto) {
-    await this.prismaService.metodosPago.create({
+    const metodoPago = await this.prismaService.metodosPago.create({
       data: createMetodosPagoDto,
     })
 
-    return {message: "Metodo de pago creado con éxito"}
+    return {message: "Metodo de pago creado con éxito", data: metodoPago}
   }
 
   async findAll() {
@@ -37,13 +37,13 @@ export class MetodosPagoService {
   }
 
   async update(id: number, updateMetodosPagoDto: UpdateMetodosPagoDto) {
-    await this.prismaService.metodosPago.update({
+    const metodoPago = await this.prismaService.metodosPago.update({
       where: {
         IdMetodoPago: id
       },
       data: updateMetodosPagoDto
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Datos actualizados con exito", data: metodoPago}
   }
 }

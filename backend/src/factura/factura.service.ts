@@ -9,14 +9,11 @@ export class FacturaService {
   constructor (private prismaService: PrismaService){}
 
   async create(createFacturaDto: CreateFacturaDto) {
-    const facturaCreada = await this.prismaService.facturas.create({
-      data: {
-        ...createFacturaDto
-      }
-
+    const factura = await this.prismaService.facturas.create({
+      data: createFacturaDto
     })
 
-    return {message: "Factura creada", id: facturaCreada.IdFactura}
+    return {message: "Factura creada", data: factura}
   }
 
   async findAll() {
@@ -64,13 +61,13 @@ export class FacturaService {
   }
 
   async update(id: number, updateFacturaDto: UpdateFacturaDto) {
-    await this.prismaService.clientes.update({
+    const factura = await this.prismaService.facturas.update({
       where: {
-        IdCliente: id
+        IdFactura: id
       },
       data: updateFacturaDto
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Datos actualizados con exito", data: factura}
   }
 }

@@ -7,11 +7,11 @@ export class ProveedoresService {
   constructor(private prismaService: PrismaService){}
 
   async create(createProveedoreDto: CreateProveedoreDto) {
-    await this.prismaService.proveedores.create({
+    const proveedor = await this.prismaService.proveedores.create({
       data: createProveedoreDto,
     })
 
-    return {message: "Proveedor creado con éxito"}
+    return {message: "Proveedor creado con éxito", data: proveedor}
   }
 
   async findAll() {
@@ -36,13 +36,29 @@ export class ProveedoresService {
   }
 
   async update(id: number, updateProveedoreDto: UpdateProveedoreDto) {
-    await this.prismaService.proveedores.update({
+    const proveedor = await this.prismaService.proveedores.update({
       where: {
         IdProveedor: id
       },
       data: updateProveedoreDto
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Datos actualizados con exito", data: proveedor}
   }
+
+
+  async desactivarProveedor(id: number) {
+    const estadoActual = await this.findOne(id) 
+    await this.prismaService.proveedores.update({
+      where: {
+        IdProveedor: id
+      },
+      data: {
+        Estado: !estadoActual?.Estado
+      }
+    })
+
+    return {message: `Se cambio el estado del producto`, data: !estadoActual?.Estado}
+  }
+
 }

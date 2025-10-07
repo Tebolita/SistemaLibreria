@@ -10,14 +10,14 @@ export class ProductosService {
   constructor(private prismaService: PrismaService) {}
   
   async create(createProductoDto: CreateProductoDto) {
-    await this.prismaService.productos.create({
+    const producto = await this.prismaService.productos.create({
       data: {
       ...createProductoDto,
       Precio: new Decimal(createProductoDto.Precio ? createProductoDto.Precio : 0),
       Estado: true
     },
     });
-    return {message: 'Producto Creado'};
+    return {message: 'Producto Creado', data: producto};
   }
 
   async obtenerTodosLosProductos() {
@@ -51,7 +51,7 @@ export class ProductosService {
   }
 
   async actualizarProducto(id: number, updateProductoDto: UpdateProductoDto) {
-    await this.prismaService.productos.update({
+    const producto = await this.prismaService.productos.update({
       where: {
         IdProducto: id
       },
@@ -60,7 +60,7 @@ export class ProductosService {
       }
     })
 
-    return {message: `Producto ${updateProductoDto.Nombre} actualizado de manera correcta`}
+    return {message: `Producto ${updateProductoDto.Nombre} actualizado de manera correcta`, data: producto}
   }
 
   async desactivarProducto(id: number) {
@@ -74,7 +74,7 @@ export class ProductosService {
       }
     })
 
-    return {message: `Se cambio el estado del producto`}
+    return {message: `Se cambio el estado del producto`, data: !estadoActual?.Estado}
   }
 
   async productosPorCategoria(idCategoria: number){

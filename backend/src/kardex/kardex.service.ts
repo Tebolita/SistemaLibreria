@@ -8,16 +8,17 @@ export class KardexService {
   constructor(private prismaService: PrismaService){}
 
   async create(createKardexDto: CreateKardexDto) {
-    await this.prismaService.kardex.create({
+    const kardex = await this.prismaService.kardex.create({
       data: createKardexDto
     })
 
-    return {message: "Se genero el movimiento correctamente"}
+    return {message: "Se genero el movimiento correctamente", data: kardex}
   }
 
   async findAll() {
     return await this.prismaService.kardex.findMany({
       select: {
+        IdKardex: true,
         Productos: {
           select: {
             Nombre: true
@@ -49,6 +50,7 @@ export class KardexService {
         IdKardex: id
       },
       select: {
+        IdKardex: true,
         Productos: {
           select: {
             Nombre: true
@@ -66,15 +68,14 @@ export class KardexService {
   }
 
   async update(id: number, updateKardexDto: UpdateKardexDto) {
-    await this.prismaService.kardex.update({
+    const kardex = await this.prismaService.kardex.update({
       where: {
         IdKardex: id
       },
-      data: {
-        ...updateKardexDto
-      }
+      data: updateKardexDto
+
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Datos actualizados con exito", data: kardex}
   }
 }

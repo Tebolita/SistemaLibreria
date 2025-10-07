@@ -8,11 +8,11 @@ export class MovimientosEstanteriaService {
   constructor(private prismaService: PrismaService){}
 
   async create(createMovimientosEstanteriaDto: CreateMovimientosEstanteriaDto) {
-    await this.prismaService.movimientosEstanteria.create({
+    const movimiento = await this.prismaService.movimientosEstanteria.create({
       data:  createMovimientosEstanteriaDto,
     })
 
-    return {message: "Movimiento en estanteria creado con éxito"}
+    return {message: "Movimiento en estanteria creado con éxito", data: movimiento}
   }
 
   async findAll() {
@@ -65,13 +65,13 @@ export class MovimientosEstanteriaService {
   }
 
   async update(id: number, updateMovimientosEstanteriaDto: UpdateMovimientosEstanteriaDto) {
-    await this.prismaService.movimientosEstanteria.update({
+    const movimiento = await this.prismaService.movimientosEstanteria.update({
       where: {
         IdMovimiento: id
       },
       data: updateMovimientosEstanteriaDto
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Movimiento en estanteria actualizado con éxito", data: movimiento}
   }
 }

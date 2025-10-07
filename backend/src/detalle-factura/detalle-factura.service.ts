@@ -8,34 +8,34 @@ export class DetalleFacturaService {
   constructor(private prismaService: PrismaService){}
 
   async create(createDetalleFacturaDto: CreateDetalleFacturaDto) {
-    await this.prismaService.detalleFactura.create({
-      data: {...createDetalleFacturaDto}  
+    const detalleFactura = await this.prismaService.detalleFactura.create({
+      data: createDetalleFacturaDto
     })
 
-    return {  message: "Detalle factura creado con éxito"};
+    return {  message: "Detalle factura creado con éxito", data: detalleFactura};
   }
 
   async findAll() {
     return await this.prismaService.detalleFactura.findMany()
   }
 
-  async findOne(idDetalle: number) {
+  async findOne(id: number) {
     return await this.prismaService.detalleFactura.findUnique({
       where: {
-          IdDetalle: idDetalle
+          IdDetalle: id
       }
     })
   }
 
   async update(id: number, updateDetalleFacturaDto: UpdateDetalleFacturaDto) {
-    await this.prismaService.detalleFactura.update({
+    const detalleFactura = await this.prismaService.detalleFactura.update({
       where: {
         IdDetalle: id
       },
-      data: {
-        ...updateDetalleFacturaDto
-      }
+      data: updateDetalleFacturaDto
     })
+
+    return {message: "Detalle factura actualizado con éxito", data: detalleFactura};
   }
 
 }

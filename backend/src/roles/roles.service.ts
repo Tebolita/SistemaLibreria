@@ -8,10 +8,10 @@ export class RolesService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createRoleDto: CreateRoleDto) {
-    await this.prismaService.roles.create({
+    const role = await this.prismaService.roles.create({
       data: createRoleDto
     });
-    return {message: 'Rol Creado'};
+    return {message: 'Rol creado correctamente', data: role};
   }
 
   async findAll() {
@@ -22,29 +22,18 @@ export class RolesService {
     return await this.prismaService.roles.findUnique({
       where: { IdRol: id },
       select: {
+        IdRol: true,
         NombreRol: true,
       },
     });
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
-    await this.prismaService.roles.update({
+    const role = await this.prismaService.roles.update({
       where: { IdRol: id },
       data: updateRoleDto,
     });
-    return {message: `Rol actualizado`}
+    return {message: `Rol actualizado`, data: role}
   }
 
-  async changeState(id: number) {
-    await this.prismaService.roles.update({
-      where: {
-        IdRol: id
-      },
-      data: {
-        NombreRol: "0"
-      }
-    })
-
-    return {message: `Rol desactivado de manera correcta`}
-  }
 }

@@ -9,12 +9,10 @@ export class EstanteriaService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createEstanteriaDto: CreateEstanteriaDto) {
-    await this.prismaService.estanteria.create({
-      data: {
-        ...createEstanteriaDto
-      }
+    const estanteria = await this.prismaService.estanteria.create({
+      data: createEstanteriaDto
     })
-    return {message: 'Estanteria creada exitosamente'}
+    return {message: 'Estanteria creada exitosamente', data: estanteria}
   }
 
   async findAll() {
@@ -43,7 +41,7 @@ export class EstanteriaService {
   }
 
   async update(id: number, updateEstanteriaDto: UpdateEstanteriaDto) {
-    await this.prismaService.estanteria.update({
+    const estanteria = await this.prismaService.estanteria.update({
       where: {
         idEstanteria: id
       },
@@ -52,7 +50,7 @@ export class EstanteriaService {
       }
     })
 
-    return {message: `Estanteria ${updateEstanteriaDto.Nombre} actualizada de manera correcta`}
+    return {message: `Estanteria ${updateEstanteriaDto.Nombre} actualizada de manera correcta`, data: estanteria}
   }
 
 

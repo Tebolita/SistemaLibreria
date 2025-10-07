@@ -8,14 +8,11 @@ export class ClientesService {
   constructor(private prismaService: PrismaService){}
 
   async create(createClienteDto: CreateClienteDto) {
-    await this.prismaService.clientes.create({
-      data: {
-        ...createClienteDto,
-        Estado: true
-      }
+    const cliente = await this.prismaService.clientes.create({
+      data: createClienteDto
     })
 
-    return {message: "Cliente creado con éxito"}
+    return {message: "Cliente creado con éxito", data: cliente}
   }
 
   async findAll() {
@@ -44,7 +41,7 @@ export class ClientesService {
   }
 
   async update(id: number, updateClienteDto: UpdateClienteDto) {
-    await this.prismaService.clientes.update({
+    const cliente = await this.prismaService.clientes.update({
       where: {
         IdCliente: id
       },
@@ -53,7 +50,7 @@ export class ClientesService {
       }
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Datos actualizados con exito", data: cliente}
   }
 
   async changeState(id: number) {
@@ -67,6 +64,6 @@ export class ClientesService {
       }
 
     })
-    return {message: 'Se cambio el estado del cliente'}
+    return {message: 'Se cambio el estado del cliente', data: !estadoActual?.Estado}
   }
 }

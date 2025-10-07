@@ -9,11 +9,11 @@ export class InventarioEstanteriaService {
     private prismaService: PrismaService) {}
 
   async create(createInventarioEstanteriaDto: CreateInventarioEstanteriaDto) {
-    await this.prismaService.inventarioEstanteria.create({
-      data: createInventarioEstanteriaDto,
+    const inventarioEstanteria = await this.prismaService.inventarioEstanteria.create({
+      data: createInventarioEstanteriaDto
     })
 
-    return {message: "Producto agregado al inventario con éxito"}
+    return {message: "Producto agregado al inventario con éxito", data: inventarioEstanteria}
   }
 
   async findAll() {
@@ -61,15 +61,13 @@ export class InventarioEstanteriaService {
   }
 
   async update(id: number, updateInventarioEstanteriaDto: UpdateInventarioEstanteriaDto) {
-    await this.prismaService.inventarioEstanteria.update({
+    const inventarioEstanteria = await this.prismaService.inventarioEstanteria.update({
       where: {
         IdInventario: id
       },
-      data: {
-        ...updateInventarioEstanteriaDto
-      }
+      data: updateInventarioEstanteriaDto
     })
 
-    return {message: "Datos actualizados con exito"}
+    return {message: "Inventario de estantería actualizado con éxito", data: inventarioEstanteria}
   }
 }

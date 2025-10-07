@@ -18,9 +18,9 @@ export class DetalleFacturaController {
   }
 
 
-  @Get('unico/:idDetalle')
-  findOne(@Param('idDetalle') idDetalle: number) {
-    return this.detalleFacturaService.findOne(idDetalle);
+  @Get('unico/:id')
+  findOne(@Param('id') id: number) {
+    return this.detalleFacturaService.findOne(id);
   }
 
   @Patch('actualizar/:id')
