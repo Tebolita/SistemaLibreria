@@ -21,7 +21,27 @@ export class ProductosService {
   }
 
   async obtenerTodosLosProductos() {
-   return await this.prismaService.productos.findMany()
+   return await this.prismaService.productos.findMany({
+    select: {
+      IdProducto: true,
+      Nombre: true,
+      Descripcion: true,
+      Precio: true,
+      Stock: true,
+      Categorias: {
+        select: {
+          Nombre: true,
+        }
+      },
+      Proveedores: {
+        select: {
+          NombreEmpresa: true
+        }
+      },
+      Estado: true,
+      Imagen: true
+    }
+   })
   }
 
   async obtenerUnProducto(id: number) {

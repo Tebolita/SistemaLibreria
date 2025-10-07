@@ -22,12 +22,10 @@ export class CategoriasService {
   }
 
   async searchByText(texto: string){
-    return await this.prismaService.estanteria.findMany({
+    return await this.prismaService.categorias.findMany({
       where: {
         OR: [
-          { Nombre: { contains: texto } },
-          { Ubicacion: { contains: texto } },
-          { Encargado: { contains: texto } },
+          { Nombre: { contains: texto } }
         ]
       }
     })
