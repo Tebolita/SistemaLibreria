@@ -13,7 +13,7 @@ const Menus = [
     Titulo: "Producto",
     SubMenus: [
       { Icon: <Package />, Titulo: "Producto", ruta: "/producto" },
-      { Icon: <Package />, Titulo: "Agregar Producto", ruta: "/agregarproducto" },
+      { Icon: <Package />, Titulo: "Agregar Producto", ruta: "/producto/agregarProducto" },
       { Icon: <PackageSearch />, Titulo: "Buscar Producto", ruta: "/buscarproducto" },
       { Icon: <PackageMinus />, Titulo: "Eliminar Producto", ruta: "/eliminarproducto" },
       { Icon: <PackageOpen />, Titulo: "Actualizar Producto", ruta: "/actualizarproducto" },
@@ -60,9 +60,9 @@ export function MenuAdministrador() {
     
     return (
       <>
-      <Command className="rounded-lg border shadow-md md:min-w-[450px] h-full bg-gray-800 text-white">
+      <Command className="rounded-lg border shadow-md md:min-w-[450px] h-full bg-gray-800 text-white pt-30">
         <CommandInput placeholder="Type a command or search..." className="h-full"  />
-        <CommandList className="min-h-[400px] max-h-[100vh] w-full">
+        <CommandList className="min-h-[400px] max-h-[100vh] w-full ">
           <CommandEmpty>No results found.</CommandEmpty>
           
           {Menus.map((menu) => (

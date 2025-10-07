@@ -14,6 +14,7 @@ export class CategoriasService {
         Estado: true
       }
     })
+    return {message: 'Categoria creada de manera correcta'}
   }
 
   findAll() {

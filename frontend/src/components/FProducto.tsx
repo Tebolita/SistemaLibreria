@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { useProductos } from "@/hooks/useProductos"
+
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -25,24 +27,25 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { toast } from "sonner"
 
 const formSchema = z.object({
-  producto_nombre: z.string().min(2, {
+  Nombre: z.string().min(2, {
     message: "El valor ingresado no es válido.",
   }),
-  descripcion: z.string().min(2, {
+  Descripcion: z.string().min(2, {
     message: "El valor ingresado no es válido.",
   }),
-  precio: z.string().min(2, {
+  Precio: z.string().min(2, {
     message: "El valor ingresado no es válido.",
   }),
-  stock: z.string().min(2, {
+  Stock: z.string().min(2, {
     message: "El valor ingresado no es válido.",
   }),
-  categoria: z.string().min(2, {
+  IdCategoria: z.string().min(1, {
     message: "El valor ingresado no es válido.",
   }),
-  proveedor: z.string().min(2, {
+  IdProveedor: z.string().min(1, {
     message: "El valor ingresado no es válido.",
   }),
 })
@@ -52,20 +55,21 @@ export function FProducto() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      producto_nombre: "",
-      descripcion:"",
-      precio:"",
-      stock:"",
-      categoria:"",
-      proveedor:"",
+      Nombre: "",
+      Descripcion:"",
+      Precio:"",
+      Stock:"",
+      IdCategoria:"",
+      IdProveedor:"",
     },
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  const { CrearProducto } = useProductos()
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const response = await CrearProducto(values)
+    toast.success(response?.message)
   }
   
   return (
@@ -73,7 +77,7 @@ export function FProducto() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="producto_nombre"
+          name="Nombre"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre del producto:</FormLabel>
@@ -86,7 +90,7 @@ export function FProducto() {
         />
         <FormField
           control={form.control}
-          name="descripcion"
+          name="Descripcion"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Descripcion:</FormLabel>
@@ -99,12 +103,12 @@ export function FProducto() {
         />
         <FormField
           control={form.control}
-          name="precio"
+          name="Precio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Ingrese el precio unitario del producto:</FormLabel>
+              <FormLabel>Ingrese el Precio unitario del producto:</FormLabel>
               <FormControl>
-                <Input placeholder="precio" {...field} />
+                <Input placeholder="Precio" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -112,12 +116,12 @@ export function FProducto() {
         />
         <FormField
           control={form.control}
-          name="stock"
+          name="Stock"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Ingrese la cantidad de producto disponible:</FormLabel>
               <FormControl>
-                <Input placeholder="stock" {...field} />
+                <Input placeholder="Stock" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -125,11 +129,11 @@ export function FProducto() {
         />
         <FormField
           control={form.control}
-          name="categoria"
+          name="IdCategoria"
           render={({ field }) => (
             <>
             <FormItem>
-              <FormLabel>Seleccione la categoria del producto:</FormLabel>
+              <FormLabel>Seleccione la IdCategoria del producto:</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -137,9 +141,9 @@ export function FProducto() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="Libro">Libro</SelectItem>
-                  <SelectItem value="Miselanea">Miselanea</SelectItem>
-                  <SelectItem value="Papelería">Papelería</SelectItem>
+                  <SelectItem value="1">Libro</SelectItem>
+                  <SelectItem value="2">Miselanea</SelectItem>
+                  <SelectItem value="3">Papelería</SelectItem>
                 </SelectContent> 
               </Select>
               <FormMessage />
@@ -149,20 +153,20 @@ export function FProducto() {
         />
         <FormField
           control={form.control}
-          name="proveedor"
+          name="IdProveedor"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Seleccione el nombre del proveedor del producto:</FormLabel>
+              <FormLabel>Seleccione el nombre del IdProveedor del producto:</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Seleccione el nombre del proveedor del producto" />
+                    <SelectValue placeholder="Seleccione el nombre del IdProveedor del producto" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="BIC">BIC</SelectItem>
-                  <SelectItem value="Pilot">Pilot</SelectItem>
-                  <SelectItem value="SUSAETA">SUSAETA</SelectItem>
+                  <SelectItem value="1">BIC</SelectItem>
+                  <SelectItem value="2">Pilot</SelectItem>
+                  <SelectItem value="3">SUSAETA</SelectItem>
                 </SelectContent> 
               </Select>
               <FormMessage />

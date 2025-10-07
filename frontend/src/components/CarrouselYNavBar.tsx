@@ -20,6 +20,8 @@ import { useLogin } from "@/context/loginContext";
 import { getCart, getCartCount } from "@/components/ui/cartCookie";
 import CartPopover from "@/components/ui/CartPopover";
 
+import { useCategoria } from "@/hooks/useCategorias";
+
 // =====================================================
 // 🎠 SLIDES HERO
 // =====================================================
@@ -75,13 +77,14 @@ function NavBar() {
   const nuevoUsuario = () => router.push("/nuevousuario");
 
   // Cargar categorías
+  const { categoriasTodos } = useCategoria()
+
+  const obtenerCategorias = async () => {setDataCategoria(await categoriasTodos())}
+  
   useEffect(() => {
-    async function GetCategorias() {
-      const categorias = await ObtenerCategorias();
-      setDataCategoria(categorias);
-    }
-    GetCategorias();
-  }, []);
+    obtenerCategorias()
+  }, [DataCategoria])
+
 
   // 🛒 Actualizar carrito + mostrar popup si hay nuevo producto
   useEffect(() => {

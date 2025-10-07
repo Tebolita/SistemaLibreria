@@ -1,10 +1,11 @@
 "use client";
-import  Administracion    from "@/app/Administracion/page";
+import Administracion from "../administracion/page";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import CartaPersonalizada from "@/components/Propios/cartaPersonalizada"
 import { etiquetaNuevo, etiquetaPopular, etiquetaProveedor } from "../types/etiquetas";
-export default function productos() {
 
+export default function productos() {
+  
   const cartaPersonalizadaData = [
     {
         idProducto: 1,
