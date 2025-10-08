@@ -7,6 +7,7 @@ import {Command,CommandEmpty,CommandGroup,CommandInput,CommandItem,CommandList,C
 import { useRouter } from "next/navigation";
 import React from "react";
 import Cookies from "js-cookie";
+import { useLogin } from "@/context/loginContext"
 
 const Menus = [
   {
@@ -49,11 +50,12 @@ const Menus = [
 
 
 export function MenuAdministrador() {
-
+    const { setNombreUsuario  } = useLogin();
     const router = useRouter();
     const Redireccionar = (ruta: string) => {
       if (ruta === "/") {
         Cookies.remove("authToken");
+        setNombreUsuario("")
       }      
       router.push(ruta);
     };

@@ -22,6 +22,14 @@ export const productosService = {
         const data = await response.json()
         
         return data
-    }
+    },
+
+    async ProductoPorCategoria(idCategoria: number) {
+        const response =  await fetch(`${API}produtoPorCategori/${idCategoria}`, {
+            method: 'GET'
+        } )
+
+        return await response.json()
+    }    
 
 }

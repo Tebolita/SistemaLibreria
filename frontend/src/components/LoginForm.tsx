@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { login } from "@/Apis/login.api"
-import { toast, Toaster } from "sonner"
+import { toast } from "sonner"
 import { GetEmail } from "@/Apis/login.api"
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card"
 import { useLogin } from "@/context/loginContext"
+import Cookies from "js-cookie";
 
 export function LoginForm() {
   const [usuario, setUsuario] = useState("")
@@ -21,7 +22,6 @@ export function LoginForm() {
       setshowLoginForm(!showLoginForm);
   };
 
-  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
       setLoading(true)
@@ -49,8 +49,16 @@ export function LoginForm() {
       }
     }
 
+    const router = useRouter();
+    const Redireccionar = () => {
+
+      Cookies.remove("authToken");
+      setNombreUsuario("")
+      router.push("/");
+    };    
   return (
     <>
+    { nombreUsuario == ""  || nombreUsuario == undefined ?
     <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute" style={{ zIndex: 100 }}>
       <Card className={`w-full max-w-sm ml-auto mr-[15%] absolute ` } >
 
@@ -112,6 +120,20 @@ export function LoginForm() {
         </form>
       </Card>  
     </div> 
+    :
+    <div className="relative w-full max-w-sm ml-auto mr-[15%] absolute" style={{ zIndex: 100 }}>
+      <Card className={`w-full max-w-sm ml-auto mr-[15%] absolute ` } >
+          <div className="flex space-x-3 justify-center">
+            <Button variant="outline" className="h-9 px-6 cursor-pointer" type="button" >
+              Mi Usuario
+            </Button>
+            <Button className="h-9 px-6 bg-blue-900 hover:bg-blue-800 text-white cursor-pointer" type="submit" disabled={loading} onClick={() => Redireccionar()} >
+              {loading ? "Cerrando sesion..." : "Cerrar sesion"}
+            </Button>
+          </div>
+      </Card>  
+    </div> 
+ }
     </>
   )
 }

@@ -1,8 +1,9 @@
 import { productosService } from "../service/productosServices";
 
 export function useProductos(){
-    try {
+    
         const CrearProducto = async (productoData: any) => {
+            try {
             const dataClean = {
                 ...productoData,
                 Precio: parseFloat(productoData.Precio),
@@ -15,16 +16,30 @@ export function useProductos(){
             
             const response = await productosService.CrearProducto(dataClean)
             return response ? response : ""
+            }catch (error) {
+                return {error: error, message: 'Hubo un error en el servidor'}
+            }  
         }
 
-        const productosTodos = async () => {
-            const datos = await productosService.ObtenerProductos()
-            return datos
+        const ProductosTodos = async () => {
+             try {
+                const datos = await productosService.ObtenerProductos()
+                return datos                
+             } catch (error) {
+                return {error: error, message: 'Hubo un error en el servidor'}
+             }
         };
 
-        return { productosTodos, CrearProducto }
+        const ProductosPorCategoria = async (idCategoria: number) => {
+             try {
+                const datos = await productosService.ProductoPorCategoria(idCategoria)
+                return datos         
 
-    } catch (error) {
-        return {error: error, message: 'Hubo un error en el servidor'}
-    }    
+             } catch (error) {
+                return {error: error, message: 'Hubo un error en el servidor'}
+             }
+        };
+
+
+    return { ProductosTodos, CrearProducto, ProductosPorCategoria }
 }

@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem, Label } from "@/components/ui/label";
 
+
 export default function SeguimientoPedido() {
   const [estadoIndex, setEstadoIndex] = useState(0);
   const [finalizado, setFinalizado] = useState(false);

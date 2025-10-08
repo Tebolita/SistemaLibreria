@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+import { useFacturas } from "@/hooks/useFacturas";
+
 export default function CheckoutPage() {
   const router = useRouter();
   const [carrito, setCarrito] = useState<any[]>([]);
@@ -18,6 +20,11 @@ export default function CheckoutPage() {
   });
   const [pago, setPago] = useState("efectivo");
   const [compraFinalizada, setCompraFinalizada] = useState(false);
+
+  //Consumo de hook personalizado para facturas
+  const { crearFactura } = useFacturas()
+
+
 
   // 🧾 Cargar carrito
   useEffect(() => {
@@ -31,11 +38,23 @@ export default function CheckoutPage() {
   }, []);
 
   // 🛍️ Confirmar compra
-  const confirmarCompra = () => {
+  const confirmarCompra = async () => {
     if (!cliente.nombre || !cliente.direccion || !cliente.telefono) {
       toast.error("Por favor completa todos los campos del cliente.");
       return;
     }
+
+    const datosFactura = {
+      "IdCliente": 1,
+      "Fecha": Date.now(),
+      "Total": total,
+      "IdUsuario": 1,
+      "IdMetodoPago": 1
+    }
+    const respuestaFactura = await crearFactura(datosFactura)
+    toast.success(respuestaFactura.message)
+    console.log(respuestaFactura.data)
+
 
     toast.success("Compra confirmada correctamente 🛍️");
     clearCart();
