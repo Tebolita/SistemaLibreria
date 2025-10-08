@@ -24,11 +24,11 @@ const Menus = [
   {
     Titulo: "Categoria",
     SubMenus: [
-      { Icon: <BookPlus />, Titulo: "Agregar Categoria", ruta: "/agregarcategoria" },
-      { Icon: <BookOpen />, Titulo: "Buscar Categoria", ruta: "/buscarcategoria" },
-      { Icon: <BookMinus />, Titulo: "Eliminar Categoria", ruta: "/eliminarcategoria" },
-      { Icon: <BookMarked />, Titulo: "Actualizar Categoria", ruta: "/actualizarcategoria" },
-      { Icon: <BookOpen />, Titulo: "Mostrar Categoria", ruta: "/mostrarcategoria" }
+      { Icon: <BookMarked />, Titulo: "Categoria", ruta: "/administracion/categoria" },
+      { Icon: <BookPlus />, Titulo: "Agregar Categoria", ruta: "/administracion/categoria/agregarCategoria" },
+      { Icon: <BookOpen />, Titulo: "Buscar Categoria", ruta: "/administracion/categoria/buscarcategoria" },
+      { Icon: <BookMarked />, Titulo: "Actualizar Categoria", ruta: "/administracion/categoria/actualizarcategoria" },
+      { Icon: <BookOpen />, Titulo: "Mostrar Categoria", ruta: "/administracion/categoria/mostrarcategoria" }
     ]
   }, 
   {

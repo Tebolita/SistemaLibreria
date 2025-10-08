@@ -1,5 +1,5 @@
 "use client";
-import Administracion from "@/app/administracion/page";
+import Administracion from "@/app/administracion/layout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { FProducto } from "@/components/FProducto";
 

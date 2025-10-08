@@ -1,5 +1,5 @@
 "use client";
-import Administracion from "../administracion/page";
+import Administracion from "@/app/administracion/layout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import CartaPersonalizada from "@/components/Propios/cartaPersonalizada"
 import { etiquetaNuevo, etiquetaPopular, etiquetaProveedor } from "../types/etiquetas";

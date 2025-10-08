@@ -197,8 +197,8 @@ function NavBar() {
 
       {/* 📚 CATEGORÍAS */}
       <nav className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-3 pb-2 md:flex">
-        {DataCategoria.map((c) => (
-          <Button key={c.Nombre} asChild variant="ghost" className="text-sm">
+        {DataCategoria.map((c, index) => (
+          <Button key={index} asChild variant="ghost" className="text-sm">
             <Link href={`/categorias/${c.Nombre}`}>{c.Nombre}</Link>
           </Button>
         ))}
