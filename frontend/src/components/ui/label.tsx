@@ -36,9 +36,14 @@ export function RadioGroup({
   const clonedChildren = React.Children.map(children, (child) => {
     if (!React.isValidElement(child)) return child;
     return React.cloneElement(child as React.ReactElement<any>, {
-      selected,
-      onSelect: handleChange,
-    });
+  selected,
+  onSelect: (value: string) => {
+    handleChange(value);
+    // Notifica al padre inmediatamente
+    onValueChange?.(value);
+  },
+});
+
   });
 
   return <div className={className}>{clonedChildren}</div>;
