@@ -2,7 +2,7 @@ import { useCategoria } from "@/hooks/useCategorias"
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-
+import { toast } from "sonner";
 
  const {actualizarCategoria} = useCategoria();
 
@@ -11,7 +11,7 @@ export function CategoriaActualizar({idCategoria, Nombre, Descripcion}: any) {
 
     async function handleActualizarCategoria(id: number, Data: any) {
         const response = await actualizarCategoria(id, Data);
-        console.log(response)
+        toast.success(response?.message);
     }    
     let Data = {
         nombre: Nombre,
@@ -35,7 +35,7 @@ export function CategoriaActualizar({idCategoria, Nombre, Descripcion}: any) {
         <Label htmlFor="nombre">Nombre</Label>
         <Input onChange={handleOnChange} name="nombre" id="nombre" defaultValue={Nombre} />
       </div>
-      <Button onClick={(e) => { e.preventDefault(); handleActualizarCategoria(idCategoria, { ...Data }) }} type="submit">Guardar cambios</Button>
+      <Button onClick={() => { handleActualizarCategoria(idCategoria, Data ) }} type="submit">Guardar cambios</Button>
     </form>
         </div>
     )

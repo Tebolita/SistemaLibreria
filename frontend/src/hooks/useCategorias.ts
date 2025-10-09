@@ -34,12 +34,14 @@ export function useCategoria() {
         }
     }
     const actualizarCategoria = async (id: number, data: any) => {
+        console.log(id, data)
         try {
             const dataClean = {
-                Nombre: data.Nombre,
-                Descripcion: data.Descripcion,
-                Estado: Boolean(data.Estado),
+                Nombre: data.nombre,
+                Descripcion: data.descripcion,
+                Estado: Boolean(data.estado),
             }
+            console.log(dataClean)
             const categoria = await categoriasServices.actualizar(id, dataClean)
             return categoria
         } catch (error) {
