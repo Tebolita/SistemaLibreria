@@ -217,7 +217,7 @@ function NavBar() {
         </div>
       </div>
 
-      HEAD
+      
       {/* 📚 CATEGORÍAS */}
       <nav className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-3 pb-2 md:flex">
         {DataCategoria.map((c, index) => (
@@ -228,7 +228,6 @@ function NavBar() {
       </nav>
 
       {/* 🔐 LOGIN MODAL */}
-      OttoMuñoz
       {showLoginForm && <LoginForm />}
 
       {/* 🧭 Drawer de categorías (versión lateral moderna) */}

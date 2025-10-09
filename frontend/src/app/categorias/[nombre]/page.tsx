@@ -85,7 +85,6 @@ export default function CategoriaPage() {
         );
 
         if (!categoria) {
-          toast.warning("Categoría no encontrada");
           setProductos([]);
           return;
         }
