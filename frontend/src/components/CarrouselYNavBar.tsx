@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -15,16 +15,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoginForm } from "./LoginForm";
 import { useRouter } from "next/navigation";
-import { ObtenerCategorias, Categorias } from "@/Apis/Categorias.api";
+import { Categorias } from "@/Apis/Categorias.api";
 import { useLogin } from "@/context/loginContext";
-import { getCart, getCartCount } from "@/components/ui/cartCookie";
+import { getCartCount } from "@/components/ui/cartCookie";
 import CartPopover from "@/components/ui/CartPopover";
-
 import { useCategoria } from "@/hooks/useCategorias";
+import CategoriaDrawer from "@/components/navbar/CategoriaDrawer"; 
 
-// =====================================================
-// 🎠 SLIDES HERO
-// =====================================================
+/* ==========================================================
+   🎠 SLIDES HERO
+========================================================== */
 const slides = [
   {
     id: "promo-1",
@@ -60,38 +60,38 @@ const slides = [
   },
 ];
 
-// =====================================================
-// 🧭 NAVBAR PRINCIPAL
-// =====================================================
+/* ==========================================================
+   🧭 NAVBAR PRINCIPAL
+========================================================== */
 function NavBar() {
   const { showLoginForm, setshowLoginForm, nombreUsuario } = useLogin();
   const router = useRouter();
+  const { categoriasTodos } = useCategoria();
 
   const [DataCategoria, setDataCategoria] = useState<Categorias[]>([]);
-  const [cartCount, setCartCount] = useState<number>(0);
+  const [cartCount, setCartCount] = useState(0);
   const [showCart, setShowCart] = useState(false);
   const [lastCount, setLastCount] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [showCategorias, setShowCategorias] = useState(false);
 
-  // Toggle Login modal
   const toggleLogin = () => setshowLoginForm(!showLoginForm);
   const nuevoUsuario = () => router.push("/nuevousuario");
 
-  // Cargar categorías
-  const { categoriasTodos } = useCategoria()
-
-  const obtenerCategorias = async () => {setDataCategoria(await categoriasTodos())}
-  
   useEffect(() => {
-    obtenerCategorias()
-  }, [DataCategoria])
+    (async () => setDataCategoria(await categoriasTodos()))();
+  }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  // 🛒 Actualizar carrito + mostrar popup si hay nuevo producto
   useEffect(() => {
     const tick = () => {
       const count = getCartCount();
       setCartCount(count);
-
       if (count > lastCount) {
         setShowCart(true);
         setTimeout(() => setShowCart(false), 3000);
@@ -104,20 +104,36 @@ function NavBar() {
   }, [lastCount]);
 
   return (
-    <header className="w-full border-b bg-white/90 backdrop-blur-lg fixed top-0 left-0 z-50">
+    <header
+      className={`w-full fixed top-0 left-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "backdrop-blur-md bg-white/90 shadow-md"
+          : "backdrop-blur-lg bg-white/60 shadow-sm"
+      }`}
+    >
       {/* 🟣 TOP BAR */}
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2">
-        {/* LOGO */}
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="size-5" />
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+        {/* LOGO + CATEGORÍAS */}
+        <div className="flex items-center gap-3">
+          {/* Botón Categorías */}
+          <Button
+            variant="outline"
+            onClick={() => setShowCategorias(!showCategorias)}
+            className="border-2 border-transparent bg-gradient-to-r from-indigo-500 to-sky-400 text-white hover:scale-[1.03] transition-transform shadow-sm"
+          >
+            <Menu className="size-4 mr-1" />
+            Categorías
           </Button>
+
+          {/* LOGO */}
           <Link href="/" className="flex items-center gap-2">
             <img
               src="https://img.lovepik.com/png/20231006/Creative-three-dimensional-book-store-reading-characters-reading-book-stereoscopic_100280_wh860.png"
               className="h-8 w-8 rounded-xl"
             />
-            <span className="font-semibold tracking-tight">Librería SPD</span>
+            <span className="font-semibold tracking-tight text-gray-800">
+              Librería SPD
+            </span>
           </Link>
         </div>
 
@@ -130,57 +146,63 @@ function NavBar() {
             <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 opacity-60" />
             <Input
               placeholder="Buscar libros, autores, categorías…"
-              className="pl-8"
+              className="pl-8 rounded-lg border-gray-300 focus:ring-2 focus:ring-indigo-400"
             />
           </div>
-          <Button type="submit">Buscar</Button>
+          <Button
+            type="submit"
+            className="bg-gradient-to-r from-indigo-500 to-sky-400 text-white hover:opacity-90"
+          >
+            Buscar
+          </Button>
         </form>
 
         {/* 👤 USUARIO / FAVORITOS / CARRITO */}
-        <div className="flex items-center gap-2 relative">
-          {/* Cuenta */}
-          <Button asChild variant="ghost" className="hidden md:inline-flex">
+        <div className="flex items-center gap-3 relative">
+          <Button asChild variant="ghost" className="hidden md:inline-flex group">
             <span
               onClick={toggleLogin}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer transition-transform group-hover:scale-[1.05]"
             >
-              <User className="size-4" />
+              <User className="size-4 text-indigo-600 group-hover:text-indigo-800" />
               <span>
                 {nombreUsuario ? `Bienvenido: ${nombreUsuario}` : "Cuenta"}
               </span>
             </span>
           </Button>
 
-          {/* Nueva cuenta */}
           <Button asChild variant="ghost" className="hidden md:inline-flex">
             <span
               onClick={nuevoUsuario}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
             >
-              <UserPlus2Icon className="size-4" />
+              <UserPlus2Icon className="size-4 text-sky-600" />
               <span>CrearCuenta</span>
             </span>
           </Button>
 
-          {/* Favoritos */}
-          <Button asChild variant="ghost" size="icon">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="hover:scale-[1.1] transition-transform"
+          >
             <Link href="/favoritos" aria-label="Favoritos">
-              <Heart className="size-5" />
+              <Heart className="size-5 text-rose-500 hover:text-rose-600" />
             </Link>
           </Button>
 
-          {/* 🛒 CARRITO */}
           <div className="relative">
             <Button
               variant="ghost"
               size="icon"
-              className="relative"
+              className="relative hover:scale-[1.1] transition-transform"
               onClick={() => setShowCart((v) => !v)}
               aria-label="Carrito"
             >
-              <ShoppingCart className="size-5" />
+              <ShoppingCart className="size-5 text-emerald-600" />
               {cartCount > 0 && (
-                <span className="absolute -right-1 -top-1 rounded-full bg-green-600 px-1.5 text-[11px] leading-5 text-white">
+                <span className="absolute -right-1 -top-1 rounded-full bg-green-600 px-1.5 text-[11px] leading-5 text-white shadow-md">
                   {cartCount}
                 </span>
               )}
@@ -195,6 +217,7 @@ function NavBar() {
         </div>
       </div>
 
+      HEAD
       {/* 📚 CATEGORÍAS */}
       <nav className="mx-auto hidden max-w-7xl items-center gap-1 overflow-x-auto px-3 pb-2 md:flex">
         {DataCategoria.map((c, index) => (
@@ -205,33 +228,26 @@ function NavBar() {
       </nav>
 
       {/* 🔐 LOGIN MODAL */}
+      OttoMuñoz
       {showLoginForm && <LoginForm />}
 
-      {/* 🔎 BUSCADOR MÓVIL */}
-      <div className="px-3 pb-3 md:hidden">
-        <form
-          className="flex items-center gap-2"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <div className="relative w-full">
-            <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 opacity-60" />
-            <Input placeholder="Buscar…" className="pl-8" />
-          </div>
-          <Button type="submit">Ir</Button>
-        </form>
-      </div>
+      {/* 🧭 Drawer de categorías (versión lateral moderna) */}
+      <CategoriaDrawer
+        isOpen={showCategorias}
+        onClose={() => setShowCategorias(false)}
+        categorias={DataCategoria}
+      />
     </header>
   );
 }
 
-// =====================================================
-// 🎠 HERO CAROUSEL
-// =====================================================
+/* ==========================================================
+   🎠 HERO CAROUSEL
+========================================================== */
 function HeroCarousel() {
   const [index, setIndex] = useState(0);
   const durationMs = 5000;
   const current = slides[index];
-  const nextIndex = useMemo(() => (index + 1) % slides.length, [index]);
 
   useEffect(() => {
     const t = setTimeout(() => setIndex((i) => (i + 1) % slides.length), durationMs);
@@ -250,16 +266,16 @@ function HeroCarousel() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="max-w-xl space-y-3 rounded-2xl bg-white/80 p-6 backdrop-blur-sm">
-              <h2 className="text-2xl font-bold tracking-tight md:text-4xl">
+            <div className="max-w-xl space-y-3 rounded-2xl bg-white/80 p-6 backdrop-blur-sm shadow-md">
+              <h2 className="text-2xl font-bold tracking-tight md:text-4xl text-indigo-700">
                 {current.title}
               </h2>
               <p className="text-sm text-zinc-700 md:text-base">{current.subtitle}</p>
               <div className="flex items-center gap-2 pt-2">
-                <Button asChild>
+                <Button asChild className="bg-gradient-to-r from-indigo-500 to-sky-400 text-white">
                   <Link href={current.ctaHref}>{current.ctaLabel}</Link>
                 </Button>
-                <Button variant="ghost" asChild>
+                <Button variant="outline" asChild>
                   <Link href="/categorias">Ver categorías</Link>
                 </Button>
               </div>
@@ -267,7 +283,6 @@ function HeroCarousel() {
           </motion.div>
         </AnimatePresence>
 
-        {/* 🔵 Dots */}
         <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2">
           <div className="flex items-center gap-2 rounded-full bg-black/30 px-2 py-1 backdrop-blur">
             {slides.map((s, i) => (

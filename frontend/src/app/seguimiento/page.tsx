@@ -10,10 +10,10 @@ import {
   MapPin,
   CheckCircle,
   ShieldCheck,
+  Banknote,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem, Label } from "@/components/ui/label";
-
+import { Label } from "@/components/ui/label";
 
 export default function SeguimientoPedido() {
   const [estadoIndex, setEstadoIndex] = useState(0);
@@ -25,7 +25,7 @@ export default function SeguimientoPedido() {
   const [iniciado, setIniciado] = useState(false);
   const [numeroPedido, setNumeroPedido] = useState("");
 
-  // Generar número de pedido aleatorio tipo SPD-20251006-001
+  // Generar número de pedido tipo SPD-YYYYMMDD-###
   const generarNumeroPedido = () => {
     const fecha = new Date();
     const y = fecha.getFullYear();
@@ -35,7 +35,7 @@ export default function SeguimientoPedido() {
     return `SPD-${y}${m}${d}-${random}`;
   };
 
-  // Etapas
+  // Etapas según método
   const etapasEfectivo = [
     { nombre: "Pedido recibido", color: "bg-yellow-400", icono: ClipboardList },
     { nombre: "Preparando el pedido", color: "bg-orange-400", icono: ShoppingCart },
@@ -45,9 +45,10 @@ export default function SeguimientoPedido() {
 
   const etapasTransferencia = [
     { nombre: "Pedido recibido", color: "bg-yellow-400", icono: ClipboardList },
-    { nombre: "Validando pago", color: "bg-blue-400", icono: ShieldCheck },
-    { nombre: "Pago confirmado", color: "bg-indigo-400", icono: CreditCard },
-    { nombre: "Preparando envío", color: "bg-orange-400", icono: Truck },
+    { nombre: "Transferencia recibida", color: "bg-blue-400", icono: Banknote },
+    { nombre: "Transferencia validada", color: "bg-indigo-400", icono: ShieldCheck },
+    { nombre: "Preparando el pedido", color: "bg-orange-400", icono: ShoppingCart },
+    { nombre: "En camino", color: "bg-amber-500", icono: Truck },
     { nombre: "Entregado", color: "bg-green-500", icono: MapPin },
   ];
 
@@ -113,20 +114,49 @@ export default function SeguimientoPedido() {
           {/* MÉTODO DE PAGO */}
           <div className="text-left mb-6">
             <Label className="font-semibold mb-2 block">Método de pago</Label>
-            <RadioGroup
-              defaultValue="efectivo"
-              onValueChange={(val) => setMetodoPago(val)}
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="efectivo" id="efectivo" />
-                <Label htmlFor="efectivo">Pago en efectivo (al recibir)</Label>
-              </div>
-              <div className="flex items-center space-x-2 mt-2">
-                <RadioGroupItem value="transferencia" id="transferencia" />
-                <Label htmlFor="transferencia">Transferencia bancaria</Label>
-              </div>
-            </RadioGroup>
+            <div className="flex flex-col gap-3">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="metodo"
+                  value="efectivo"
+                  checked={metodoPago === "efectivo"}
+                  onChange={(e) => setMetodoPago(e.target.value)}
+                  className="h-4 w-4 accent-indigo-600 cursor-pointer"
+                />
+                Pago en efectivo (al recibir)
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="metodo"
+                  value="transferencia"
+                  checked={metodoPago === "transferencia"}
+                  onChange={(e) => setMetodoPago(e.target.value)}
+                  className="h-4 w-4 accent-indigo-600 cursor-pointer"
+                />
+                Transferencia bancaria
+              </label>
+            </div>
           </div>
+
+          {/* 💳 DATOS BANCARIOS (solo si elige transferencia) */}
+          {metodoPago === "transferencia" && (
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5 mb-6 text-left animate-fade-in">
+              <h3 className="font-bold text-indigo-700 mb-2">
+                Datos para transferencia bancaria:
+              </h3>
+              <p><strong>Banco:</strong> Banco Industrial</p>
+              <p><strong>Cuenta:</strong> 123-456789-0</p>
+              <p><strong>Nombre:</strong> Librería SPD Guatemala</p>
+              <p><strong>Monto a transferir:</strong> Según total del pedido</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Envía tu comprobante al correo{" "}
+                <span className="text-indigo-600">pagos@spdlibros.com</span> para validación.
+              </p>
+            </div>
+          )}
 
           <Button
             className="bg-green-600 hover:bg-green-700 text-white w-full py-2 text-lg rounded-lg"
@@ -134,6 +164,11 @@ export default function SeguimientoPedido() {
           >
             Confirmar compra
           </Button>
+
+          {/* DEBUG VISUAL PARA VERIFICAR */}
+          <p className="mt-3 text-xs text-gray-500">
+            <strong>Método seleccionado:</strong> {metodoPago}
+          </p>
         </>
       )}
 
@@ -148,7 +183,8 @@ export default function SeguimientoPedido() {
               </span>
             </p>
             <p className="text-sm text-gray-500">
-              Cliente: {nombre} — {metodoPago === "efectivo" ? "Efectivo" : "Transferencia"}
+              Cliente: {nombre} —{" "}
+              {metodoPago === "efectivo" ? "Efectivo" : "Transferencia bancaria"}
             </p>
           </div>
 
@@ -165,7 +201,7 @@ export default function SeguimientoPedido() {
                     className="flex flex-col items-center w-28 transition-all duration-700"
                   >
                     <div
-                      className={`w-20 h-20 flex items-center justify-center rounded-lg text-white font-bold shadow-md transform transition-all duration-700 ${
+                      className={`w-20 h-20 flex items-center justify-center rounded-lg text-white font-bold shadow-md transition-all duration-700 ${
                         finalizado
                           ? "bg-green-500"
                           : completado
@@ -190,18 +226,6 @@ export default function SeguimientoPedido() {
                     >
                       {etapa.nombre}
                     </p>
-
-                    {index < etapas.length - 1 && (
-                      <div
-                        className={`absolute top-[40%] left-[calc(12%+${index * 20}%)] h-2 w-[18%] rounded-full -z-10 transition-all duration-700 ${
-                          finalizado
-                            ? "bg-green-500"
-                            : completado
-                            ? "bg-orange-400"
-                            : "bg-gray-300"
-                        }`}
-                      ></div>
-                    )}
                   </div>
                 );
               })}
@@ -215,8 +239,7 @@ export default function SeguimientoPedido() {
                 ✅ Pedido completado con éxito
               </h2>
               <p className="text-gray-600 mb-6">
-                ¡Gracias {nombre}! Tu pedido <strong>{numeroPedido}</strong> ha
-                sido entregado satisfactoriamente.
+                ¡Gracias {nombre}! Tu pedido <strong>{numeroPedido}</strong> ha sido entregado satisfactoriamente.
               </p>
               <Button
                 className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg"
@@ -228,6 +251,7 @@ export default function SeguimientoPedido() {
                   setDireccion("");
                   setTelefono("");
                   setNumeroPedido("");
+                  setMetodoPago("efectivo");
                 }}
               >
                 Simular nuevo pedido
