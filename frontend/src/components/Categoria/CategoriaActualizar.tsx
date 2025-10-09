@@ -4,7 +4,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
 
- const {actualizarCategoria} = useCategoria();
+const {actualizarCategoria} = useCategoria();
 
 
 export function CategoriaActualizar({idCategoria, Nombre, Descripcion}: any) {

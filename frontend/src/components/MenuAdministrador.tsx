@@ -26,18 +26,16 @@ const Menus = [
     SubMenus: [
       { Icon: <BookMarked />, Titulo: "Categoria", ruta: "/administracion/categoria" },
       { Icon: <BookPlus />, Titulo: "Agregar Categoria", ruta: "/administracion/categoria/agregarCategoria" },
-      { Icon: <BookOpen />, Titulo: "Buscar Categoria", ruta: "/administracion/categoria/buscarcategoria" },
-      { Icon: <BookMarked />, Titulo: "Actualizar Categoria", ruta: "/administracion/categoria/actualizarcategoria" },
-      { Icon: <BookOpen />, Titulo: "Mostrar Categoria", ruta: "/administracion/categoria/mostrarcategoria" }
     ]
   }, 
   {
-    Titulo: "Configuraciones",
+    Titulo: "Proveedores",
     SubMenus: [
-      { Icon: <ImagePlus />, Titulo: "Agregar Banner", ruta: "/agregarBanner" },
-      { Icon: <ImageMinus />, Titulo: "Eliminar Banner", ruta: "/eliminarBanner" },
-      { Icon: <ImagePlayIcon />, Titulo: "Actualizar Banner", ruta: "/actualizarBanner" },
-      { Icon: <ImageUpscaleIcon />, Titulo: "Mostrar banners", ruta: "/mostrarBanner" }      
+         { Icon: <ImagePlus />, Titulo: "Proveedor", ruta: "/administracion/proveedor" },
+      { Icon: <ImagePlus />, Titulo: "Agregar Proveedor", ruta: "/administracion/proveedor/agregarProveedor" },
+      { Icon: <ImageMinus />, Titulo: "Eliminar Proveedor", ruta: "/administracion/proveedor/eliminarProveedor" },
+      { Icon: <ImagePlayIcon />, Titulo: "Actualizar Proveedor", ruta: "/administracion/proveedor/actualizarProveedor" },
+      { Icon: <ImageUpscaleIcon />, Titulo: "Mostrar Proveedores", ruta: "/administracion/proveedor/mostrarProveedor" }
     ]
   }, 
   {

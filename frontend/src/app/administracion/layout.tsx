@@ -12,7 +12,7 @@ export default function Administracion({ children,}: Readonly<{children: React.R
             <div className="h-[calc(90vh)]">
               <MenuAdministrador/>
             </div>
-            <div className='w-5/6 p-6 pt-30'>
+            <div style={{ overflowY: 'auto', height: 'calc(90vh)' }} className='w-5/6 p-6 pt-30'>
                 { children }
             </div>
           </div>
