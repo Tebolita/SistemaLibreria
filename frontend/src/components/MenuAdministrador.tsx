@@ -35,6 +35,12 @@ const Menus = [
       { Icon: <ImagePlus />, Titulo: "Agregar Proveedor", ruta: "/administracion/proveedor/agregarProveedor" },
     ]
   }, 
+  {
+    Titulo: "Facturas",
+    SubMenus: [
+         { Icon: <ImagePlus />, Titulo: "Factura", ruta: "/administracion/factura" },
+    ]
+  }, 
    {
     Titulo: "Clientes",
     SubMenus: [
