@@ -33,9 +33,6 @@ const Menus = [
     SubMenus: [
          { Icon: <ImagePlus />, Titulo: "Proveedor", ruta: "/administracion/proveedor" },
       { Icon: <ImagePlus />, Titulo: "Agregar Proveedor", ruta: "/administracion/proveedor/agregarProveedor" },
-      { Icon: <ImageMinus />, Titulo: "Eliminar Proveedor", ruta: "/administracion/proveedor/eliminarProveedor" },
-      { Icon: <ImagePlayIcon />, Titulo: "Actualizar Proveedor", ruta: "/administracion/proveedor/actualizarProveedor" },
-      { Icon: <ImageUpscaleIcon />, Titulo: "Mostrar Proveedores", ruta: "/administracion/proveedor/mostrarProveedor" }
     ]
   }, 
   {

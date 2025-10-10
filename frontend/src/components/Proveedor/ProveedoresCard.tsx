@@ -19,13 +19,21 @@ import {
 } from "@/components/ui/item"
 import ModalActualizarProveedor from '../Proveedor/ProveedorActualizar';
 import { useState,useEffect } from "react";
+import { set } from "zod";
 const {proveedoresTodos} = useProveedores();
+const {proveedoresCambiarEstado} = useProveedores();
 const res =  await proveedoresTodos();
 
 
 export function ProveedoresList() { 
     
+async  function handleCambiarEstado(id: number) {
+    const response = await proveedoresCambiarEstado(id);
+    setRefresh(!refesh);
+    console.log(response);
+  }
 const [showModal, setShowModal] = useState(false);
+const[refesh,setRefresh] = useState(false);
 const [Proveedores, setProveedores] = useState(res);
 const [modalActual,setModalAtual] = useState(res[0]);
 function handleModal(IdProveedor: number,Telefono: string,Correo: string,contacto: string,NombreEmpresa: string) {
@@ -41,8 +49,7 @@ useEffect(() => {
       setProveedores(response);
     }
   fetchProveedores();
-  }, [showModal]);
-   console.log(Proveedores);
+  }, [showModal,refesh]);
   return (
     <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(550px, 1fr))', gap: '20px' }}>
@@ -70,7 +77,12 @@ useEffect(() => {
               <ItemActions>
             <Button defaultValue={proveedor.IdProveedor} onClick={() => handleModal(proveedor.IdProveedor,proveedor.Telefono,proveedor.Correo,proveedor.Contacto,proveedor.NombreEmpresa)}>Actualizar Proveedor</Button>
               </ItemActions>
-                {proveedor.Estado == 1 ? <Badge className="bg-green-500 cursor-pointer ml-1">Activo</Badge> : <Badge className="bg-red-500 cursor-pointer ml-1">Inactivo</Badge>}
+                {proveedor.Estado == 1 ? 
+              
+                  <Button style={{backgroundColor: 'green'}} onClick={() => handleCambiarEstado(proveedor.IdProveedor)}>Activo</Button>
+                   : 
+                    <Button style={{backgroundColor: 'red'}} onClick={() => handleCambiarEstado(proveedor.IdProveedor)}>Inactivo</Button>
+                    }
             </Item>
             {index !== Proveedores.length - 1 && <ItemSeparator />}
           </React.Fragment>
