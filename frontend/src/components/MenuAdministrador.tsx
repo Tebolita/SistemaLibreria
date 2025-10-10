@@ -18,7 +18,7 @@ const Menus = [
       { Icon: <PackageSearch />, Titulo: "Buscar Producto", ruta: "/buscarproducto" },
       { Icon: <PackageMinus />, Titulo: "Eliminar Producto", ruta: "/eliminarproducto" },
       { Icon: <PackageOpen />, Titulo: "Actualizar Producto", ruta: "/actualizarproducto" },
-      { Icon: <PackageOpen />, Titulo: "Mostrar Productos", ruta: "/mostrarproductos" }
+      { Icon: <PackageOpen />, Titulo: "Mostrar Productos", ruta: "/producto/mostrarProductos" }
     ]
   },
   {
