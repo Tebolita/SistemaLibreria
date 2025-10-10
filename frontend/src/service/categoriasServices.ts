@@ -46,5 +46,13 @@ export const categoriasServices = {
         })
         const res = await categoria.json()
         return res
+    },
+
+    async soloActivos(){
+        const categorias = await fetch(`${API}categoriasActivas`, {
+            method: 'GET',
+        } )
+    
+        return categorias.json()
     }
 }

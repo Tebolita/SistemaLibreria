@@ -19,6 +19,12 @@ export class CategoriasController {
     return this.categoriasService.findAll();
   }
 
+  @Get('categoriasActivas')
+  getProductsActive(){
+    return this.categoriasService.obtenerTodasLasCategoriasActivas()
+  }
+
+
 
   @Get('buscar/:text')
   searchByText(@Param('text') text: string){  

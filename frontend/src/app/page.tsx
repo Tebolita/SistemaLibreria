@@ -1,5 +1,5 @@
+"use client";
 
-import { MenuPrincipal } from "@/components/MenuPrincipal";
 import { ProductosPopulares } from "@/components/ProductosPopulares";
 import { NavBar, HeroCarousel } from "@/components/CarrouselYNavBar";
 

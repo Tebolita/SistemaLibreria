@@ -68,7 +68,7 @@ export function LoginForm() {
       setLoading(false);
     }
   };
-
+  const miUsuario = () => {router.push("/perfil"); setshowLoginForm(!showLoginForm);};
   const Redireccionar = () => {
     Cookies.remove("authToken");
     setNombreUsuario("");
@@ -164,7 +164,7 @@ export function LoginForm() {
         >
           <Card className="w-full max-w-sm ml-auto mr-[15%] absolute">
             <div className="flex space-x-3 justify-center py-5">
-              <Button variant="outline" className="h-9 px-6 cursor-pointer">
+              <Button onClick={miUsuario} variant="outline" className="h-9 px-6 cursor-pointer">
                 Mi Usuario
               </Button>
               <Button

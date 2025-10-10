@@ -18,6 +18,33 @@ const fondosPorCategoria: Record<string, string> = {
   default: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&q=80",
 };
 
+function obtenerFondoPorCategoria(nombreCategoria: string): string {
+  if (!nombreCategoria) return fondosPorCategoria.default;
+  
+  const textoLimpio = nombreCategoria.toLowerCase().trim();
+  console.log("Buscando fondo para:", textoLimpio); // Para debug
+  
+  // Patrones para cada categoría - CORREGIDOS
+  if (/\b(libros infantiles|infantil|niñ[oa]s?|kids|children|cuento infantil)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.LibrosInfantiles;
+  }
+
+
+  if (/\b(libros?|lectura|novela|cuento|revistas?)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.Libros;
+  }
+  
+  if (/\b(papeler[ií]a|cuaderno|lápices?|lapices?|bol[ií]grafos?)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.Papeleria;
+  }
+  
+  if (/\b(marcadores?|resaltadores?|highlighters?)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.Marcadores;
+  }
+  
+  return fondosPorCategoria.default;
+}
+
 /* Modal simple sin dependencias externas */
 function SimpleModal({ open, onClose, producto }: { open: boolean; onClose: () => void; producto?: any }) {
   if (!open || !producto) return null;
@@ -68,8 +95,9 @@ export default function CategoriaPage() {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [productoSeleccionado, setProductoSeleccionado] = useState<any | null>(null);
+  const [nombreCategoria, setNombreCategoria] = useState("");
 
-  const { categoriasTodos } = useCategoria();
+  const { categoriasActivas } = useCategoria();
   const { ProductosPorCategoria } = useProductos();
 
   /* 🔹 Cargar productos solo una vez por categoría */
@@ -77,47 +105,50 @@ export default function CategoriaPage() {
     const fetchProductos = async () => {
       try {
         setLoading(true);
-        const categorias = await categoriasTodos();
+        const categorias = await categoriasActivas();
         const categoria = categorias.find(
-          (c: any) =>
-            c.Nombre.toLowerCase().replace(/\s+/g, "") ===
-            String(nombre).toLowerCase().replace(/\s+/g, "")
+          (c: any) => c.Nombre.toLowerCase() === String(nombre).toLowerCase().replace(/\+|%20/g, " ")
         );
-
+        
         if (!categoria) {
           setProductos([]);
+          setNombreCategoria(""); // Resetear nombre si no hay categoría
           return;
         }
-
+        
         const productosData = await ProductosPorCategoria(categoria.IdCategoria);
+        setNombreCategoria(categoria.Nombre);
         setProductos(Array.isArray(productosData) ? productosData : []);
       } catch (error) {
-        console.error(error);
+        console.error("Error cargando productos:", error);
         toast.error("Error al cargar los productos");
+        setNombreCategoria(""); // Resetear en caso de error
       } finally {
         setLoading(false);
       }
     };
-
+    
     if (nombre) fetchProductos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nombre]); // 👈 solo depende del nombre de la categoría
+  }, [nombre]);
 
-  const fondo = fondosPorCategoria[String(nombre)] || fondosPorCategoria.default;
+  // ✅ Calcular el fondo SOLO cuando nombreCategoria cambie
+  const fondo = obtenerFondoPorCategoria(nombreCategoria);
 
   return (
     <div className="min-h-screen">
-      {/* 🖼️ Banner superior */}
-      <div
-        className="relative h-60 w-full bg-cover bg-center flex flex-col items-center justify-center text-white"
-        style={{ backgroundImage: `url(${fondo})` }}
-      >
-        <div className="absolute inset-0 bg-black/40" />
-        <h1 className="relative z-10 text-4xl font-bold capitalize">{nombre}</h1>
-        <p className="relative z-10 text-gray-200">
-          Explora nuestros productos de la categoría {nombre}.
-        </p>
-      </div>
+      {/* 🖼️ Banner superior - solo mostrar si hay nombreCategoria */}
+      {nombreCategoria && (
+        <div
+          className="relative h-60 w-full bg-cover bg-center flex flex-col items-center justify-center text-white"
+          style={{ backgroundImage: `url(${fondo})` }}
+        >
+          <div className="absolute inset-0 bg-black/40" />
+          <h1 className="relative z-10 text-4xl font-bold capitalize">{nombreCategoria}</h1>
+          <p className="relative z-10 text-gray-200">
+            Explora nuestros productos de la categoría {nombreCategoria}.
+          </p>
+        </div>
+      )}
 
       {/* 🛍️ Productos */}
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

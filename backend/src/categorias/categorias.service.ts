@@ -19,6 +19,16 @@ export class CategoriasService {
     return categorias;
   }
 
+  obtenerTodasLasCategoriasActivas() {
+    const categorias = this.prismaService.categorias.findMany({
+      where: {
+        Estado: true
+      }
+    });
+    return categorias;
+  }
+
+
   async searchByText(texto: string){
     return await this.prismaService.categorias.findMany({
       where: {

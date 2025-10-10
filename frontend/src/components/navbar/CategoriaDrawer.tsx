@@ -1,24 +1,47 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, UserCircle, LogIn } from "lucide-react";
+import { X, UserCircle, LogIn, Settings } from "lucide-react";
 import Link from "next/link";
 import { Categorias } from "@/Apis/Categorias.api";
-import { useLogin } from "@/context/loginContext"; // ✅ Tu contexto
+import { useLogin } from "@/context/loginContext"; 
+import { useUserRole } from "@/hooks/UserRole";
 
-// 🎨 Fondo para cada categoría
 const fondosPorCategoria: Record<string, string> = {
-  Libros:
-    "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&q=80",
-  Revistas:
-    "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80",
-  Papeleria:
-    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80",
-  Marcadores:
-    "https://plus.unsplash.com/premium_photo-1724153088296-f2c46f792ce1?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0",
-  LibrosInfantiles:
-    "https://images.unsplash.com/photo-1574165425193-609abebe225c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0",
+  Libros: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&q=80",
+  Papeleria: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80",
+  Marcadores: "https://plus.unsplash.com/premium_photo-1724153088296-f2c46f792ce1?q=80&w=1171&auto=format",
+  LibrosInfantiles: "https://images.unsplash.com/photo-1574165425193-609abebe225c?q=80&w=1170",
+  default: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&q=80",
 };
+
+// Función para obtener el fondo por categoría con coincidencias flexibles
+function obtenerFondoPorCategoria(nombreCategoria: string): string {
+  if (!nombreCategoria) return fondosPorCategoria.default;
+  
+  const textoLimpio = nombreCategoria.toLowerCase().trim();
+  
+
+  // Patrones para cada categoría
+  if (/\b(libros infantiles|infantil|niñ[oa]s?|kids|children|cuento infantil)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.LibrosInfantiles;
+  }
+
+  if (/\b(libros?|lectura|novela|cuento|revistas?)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.Libros;
+  }
+  
+  if (/\b(papeler[ií]a|cuaderno|lápices?|lapices?|bol[ií]grafos?)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.Papeleria;
+  }
+  
+  if (/\b(marcadores?|resaltadores?|highlighters?)\b/.test(textoLimpio)) {
+    return fondosPorCategoria.Marcadores;
+  }
+  
+  
+  return fondosPorCategoria.default;
+}
 
 interface CategoriaDrawerProps {
   isOpen: boolean;
@@ -31,8 +54,8 @@ export default function CategoriaDrawer({
   onClose,
   categorias,
 }: CategoriaDrawerProps) {
-  const { nombreUsuario } = useLogin(); // ✅ Obtenemos el usuario del contexto
-
+  const { nombreUsuario, setshowLoginForm } = useLogin();
+  const { role } = useUserRole();
   return (
     <AnimatePresence>
       {isOpen && (
@@ -67,12 +90,31 @@ export default function CategoriaDrawer({
 
             {/* Lista visual de categorías */}
             <div className="flex flex-col gap-3 p-4">
+                  {role === 'Administrador' ? (
+                    <Link
+                      href="/producto"
+                      onClick={onClose}
+                      className="relative h-[120px] w-full rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:scale-[1.02] group bg-gradient-to-r from-indigo-600 to-blue-500"
+                    >
+                      <div className="absolute inset-0 flex items-center justify-between px-5">
+                        <div>
+                          <h3 className="text-white text-lg font-bold drop-shadow-md flex items-center gap-2">
+                            <Settings className="h-6 w-6" /> Mi sistema
+                          </h3>
+                          <p className="text-gray-100 text-sm">
+                            Administrar sistema
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ) : ""}
+
+
               {categorias.length > 0 ? (
                 <>
                   {categorias.map((cat) => {
-                    const fondo =
-                      fondosPorCategoria[cat.Nombre] ||
-                      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&q=80";
+                    // ✅ Usar la función para obtener el fondo correcto
+                    const fondo = obtenerFondoPorCategoria(cat.Nombre);
 
                     return (
                       <Link
@@ -97,7 +139,7 @@ export default function CategoriaDrawer({
                     );
                   })}
 
-                  {/* 🔹 Mostrar “Mi perfil” si hay usuario, si no “Iniciar sesión” */}
+                  {/* 🔹 Mostrar "Mi perfil" si hay usuario, si no "Iniciar sesión" */}
                   {nombreUsuario ? (
                     <Link
                       href="/perfil"
@@ -113,16 +155,12 @@ export default function CategoriaDrawer({
                             Ver y editar tu cuenta
                           </p>
                         </div>
-                        <div className="bg-white/90 text-indigo-700 font-semibold px-3 py-2 rounded-lg shadow hover:bg-white transition-all">
-                          Ir
-                        </div>
                       </div>
                     </Link>
                   ) : (
-                    <Link
-                      href="/Login"
-                      onClick={onClose}
-                      className="relative h-[120px] w-full rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:scale-[1.02] group bg-gradient-to-r from-gray-600 to-gray-800"
+                    <span
+                      onClick={() => {onClose(); setshowLoginForm(true)}}
+                      className="relative h-[120px] w-full rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:scale-[1.02] group bg-gradient-to-r from-gray-600 to-gray-800 cursor-pointer"
                     >
                       <div className="absolute inset-0 flex items-center justify-between px-5">
                         <div>
@@ -133,11 +171,8 @@ export default function CategoriaDrawer({
                             Accede para ver tu cuenta
                           </p>
                         </div>
-                        <div className="bg-white/90 text-gray-800 font-semibold px-3 py-2 rounded-lg shadow hover:bg-white transition-all">
-                          Ir
-                        </div>
                       </div>
-                    </Link>
+                    </span>
                   )}
                 </>
               ) : (

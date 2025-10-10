@@ -1,4 +1,5 @@
 import { categoriasServices } from "@/service/categoriasServices";
+import { useState } from "react";
 
 
 export function useCategoria() {
@@ -48,5 +49,16 @@ export function useCategoria() {
             return {error: error, message: 'Hubo un error en el servidor'}
         }
     }
-    return { categoriasTodos, crearCategoria, cambiarEstado, actualizarCategoria }
+
+    const categoriasActivas = async () => {
+        try {
+            const categorias = await categoriasServices.soloActivos()
+            return categorias
+        } catch (error) {
+            return {error: error, message: 'Hubo un error en el servidor'}
+        }
+    }
+
+
+    return { categoriasTodos, crearCategoria, cambiarEstado, actualizarCategoria, categoriasActivas}
 }

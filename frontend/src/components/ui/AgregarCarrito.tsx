@@ -31,7 +31,7 @@ export default function AgregarCarrito({ producto }: Props): JSX.Element {
   return (
     <Button
       onClick={agregar}
-      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white cursor-pointer"
     >
       <ShoppingCart className="w-4 h-4" />
       Agregar

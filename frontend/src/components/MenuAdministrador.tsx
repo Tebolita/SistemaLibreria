@@ -71,7 +71,7 @@ export function MenuAdministrador() {
     
     return (
       <>
-      <Command className="rounded-lg border shadow-md md:min-w-[450px] h-full bg-gray-800 text-white pt-30">
+      <Command className="rounded-lg border shadow-md md:min-w-[450px] h-full bg-gray-800 text-white pt-5">
         <CommandInput placeholder="Type a command or search..." className="h-full"  />
         <CommandList className="min-h-[400px] max-h-[100vh] w-full ">
           <CommandEmpty>No results found.</CommandEmpty>

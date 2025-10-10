@@ -10,17 +10,19 @@ import {
   Menu,
   Heart,
   UserPlus2Icon,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoginForm } from "./LoginForm";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation"; // ✅ Agregar usePathname
 import { Categorias } from "@/Apis/Categorias.api";
 import { useLogin } from "@/context/loginContext";
 import { getCartCount } from "@/components/ui/cartCookie";
 import CartPopover from "@/components/ui/CartPopover";
 import { useCategoria } from "@/hooks/useCategorias";
-import CategoriaDrawer from "@/components/navbar/CategoriaDrawer"; 
+import CategoriaDrawer from "@/components/navbar/CategoriaDrawer";
+import { useUserRole } from "@/hooks/UserRole"; 
 
 /* ==========================================================
    🎠 SLIDES HERO
@@ -66,8 +68,9 @@ const slides = [
 function NavBar() {
   const { showLoginForm, setshowLoginForm, nombreUsuario } = useLogin();
   const router = useRouter();
-  const { categoriasTodos } = useCategoria();
-
+  const pathname = usePathname(); // ✅ Para detectar cambios de ruta
+  const { categoriasActivas } = useCategoria();
+  const { role } = useUserRole()
   const [DataCategoria, setDataCategoria] = useState<Categorias[]>([]);
   const [cartCount, setCartCount] = useState(0);
   const [showCart, setShowCart] = useState(false);
@@ -77,10 +80,22 @@ function NavBar() {
 
   const toggleLogin = () => setshowLoginForm(!showLoginForm);
   const nuevoUsuario = () => router.push("/nuevousuario");
+  const administracionSettings = () => router.push("/producto");
+  const UsuarioSettings = () => router.push("/perfil");
 
+  // ✅ Cargar categorías al montar y cuando cambie la ruta
   useEffect(() => {
-    (async () => setDataCategoria(await categoriasTodos()))();
-  }, []);
+    const loadCategorias = async () => {
+      try {
+        const categorias = await categoriasActivas();
+        setDataCategoria(categorias);
+      } catch (error) {
+        console.error("Error cargando categorías:", error);
+      }
+    };
+
+    loadCategorias();
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -170,7 +185,30 @@ function NavBar() {
               </span>
             </span>
           </Button>
-
+          {role === "Administrador" 
+          ? 
+          <Button asChild variant="ghost" className="hidden md:inline-flex">
+            <span
+              onClick={administracionSettings}
+              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
+            >
+              <Settings className="size-4 text-sky-600" />
+              <span>Administrar sistema</span>
+            </span>
+          </Button>
+          
+          :
+          role !== "Administrador" && role !== "guest" ?  
+          <Button asChild variant="ghost" className="hidden md:inline-flex">
+            <span
+              onClick={UsuarioSettings}
+              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
+            >
+              <Settings className="size-4 text-sky-600" />
+              <span>Mi usuario</span>
+            </span>
+          </Button>                  
+          :
           <Button asChild variant="ghost" className="hidden md:inline-flex">
             <span
               onClick={nuevoUsuario}
@@ -179,7 +217,7 @@ function NavBar() {
               <UserPlus2Icon className="size-4 text-sky-600" />
               <span>CrearCuenta</span>
             </span>
-          </Button>
+          </Button>}
 
           <Button
             asChild
@@ -254,7 +292,7 @@ function HeroCarousel() {
   }, [index]);
 
   return (
-    <section className="relative w-full mt-20">
+    <section className="relative w-full mt-5">
       <div className="relative h-[40vh] w-full overflow-hidden sm:h-[50vh] md:h-[60vh]">
         <AnimatePresence initial={false}>
           <motion.div

@@ -41,7 +41,7 @@ export const productosService = {
   },
 
   // 🟠 Nuevo → Obtener productos en oferta (usando productos activos por ahora)
-  async ObtenerOfertas() {
+  async ObtenerActivos() {
     const response = await fetch(`${API}productosActivos`, {
       method: "GET",
     });

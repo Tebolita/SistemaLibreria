@@ -7,8 +7,6 @@ import { Check, X } from "lucide-react"
 import { useCategoria } from "@/hooks/useCategorias"
 import {  useState } from "react";
 import { CategoriaActualizar } from "./CategoriaActualizar";
- 
-
 export default function CategoriasCard({ idCategoria, Nombre, Descripcion, Estado }: any) {
    const { cambiarEstado } = useCategoria();
    const [estado, setEstado] = useState(Estado);
@@ -41,14 +39,16 @@ export default function CategoriasCard({ idCategoria, Nombre, Descripcion, Estad
         
             <div style={{alignSelf:'flex-end'}}>
               <div style={{display: 'inline-block', marginRight: '10px'}}>
-              <Button onClick={() => setShowModal(!showModal)} size="sm" style={{backgroundColor: 'blue '}} > Actualizar Categoía</Button>
+              <Button onClick={() => setShowModal(!showModal)} size="sm" style={{backgroundColor: 'blue '}} className="cursor-pointer"> Actualizar Categoía</Button>
             </div>
               {estado == 1 ? 
-              <Button onClick={() => handleCambiarEstado(idCategoria)} variant="destructive" size="sm">
+              <Button onClick={() => handleCambiarEstado(idCategoria)} variant="destructive" size="sm" className="cursor-pointer">
                 <X />
-                Desactivar</Button> : <Button onClick={() => handleCambiarEstado(idCategoria)} style={{backgroundColor: 'green'}} size="sm">
+                Desactivar
+              </Button> : <Button onClick={() => handleCambiarEstado(idCategoria)} style={{backgroundColor: 'green'}} size="sm" className="cursor-pointer">
                   <Check />
-                  Activar</Button>}
+                  Activar
+              </Button>}
             </div>
           </CardFooter>
         </Card>

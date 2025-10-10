@@ -38,7 +38,6 @@ export function useProductos() {
     }
   };
 
-  // ✅ Nuevo: obtener producto por su ID (detalle individual)
   const obtenerUnico = async (idProducto: number) => {
     try {
       const producto = await productosService.ObtenerPorId(idProducto);
@@ -49,10 +48,9 @@ export function useProductos() {
     }
   };
 
-  // ✅ Nuevo: obtener productos destacados / ofertas
-  const obtenerOfertas = async () => {
+  const ObtenerActivos = async () => {
     try {
-      const productos = await productosService.ObtenerOfertas();
+      const productos = await productosService.ObtenerActivos();
       return productos;
     } catch (error) {
       console.error(error);
@@ -60,5 +58,5 @@ export function useProductos() {
     }
   };
 
-  return { ProductosTodos, CrearProducto, ProductosPorCategoria, obtenerUnico, obtenerOfertas };
+  return { ProductosTodos, CrearProducto, ProductosPorCategoria, obtenerUnico, ObtenerActivos };
 }

@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react";
 import { GetEmail } from "@/Apis/login.api";
 import  { useLogin } from "@/context/loginContext";
