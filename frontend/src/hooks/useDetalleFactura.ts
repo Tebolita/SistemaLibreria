@@ -1,3 +1,6 @@
+import { DetallefacturaServices } from "@/service/DetalleFacturaServices";
+
+
 const API = "http://localhost:4000/api/detalle-factura/";
 
 export function useDetalleFactura() {
@@ -51,6 +54,50 @@ export function useDetalleFactura() {
       return [];
     }
   };
-
-  return { todos, crearDetalle, obtenerPorFactura };
+const DFTodos = async () => {
+            try {
+                const proveedores = await DetallefacturaServices.todos();
+                return proveedores;
+            } catch (error) {
+                console.error("Error fetching proveedores:", error);
+                return [];
+            }
+        };
+    
+        const DFcrear = async (data: any) => {
+            try {
+                const clearData = {
+                    NombreEmpresa: data.NombreEmpresa,
+                    Contacto: data.Contacto,
+                    Telefono: data.Telefono,
+                    Correo: data.Correo,
+                    Estado: Boolean(data.Estado),
+                };
+                console.log("Clean Data:", clearData);
+                const proveedor = await DetallefacturaServices.crear(clearData);
+                return proveedor;
+            } catch (error) {
+                console.error("Error creating proveedor:", error);
+                return null;
+            }
+        };
+        const DFUnico = async(id:number)=>{
+            try{
+                const DFUnico = await DetallefacturaServices.unico(id)
+                return DFUnico;
+            }catch(error){
+                console.error(error)
+                return null
+            }
+        }
+        const DFActualizar = async (id: number, data: any) => {
+            try {
+                const proveedor = await DetallefacturaServices.actualizar(id, data);
+                return proveedor;
+            } catch (error) {
+                console.error("Error updating proveedor:", error);
+                return null;
+            }
+        };
+  return { todos, crearDetalle, obtenerPorFactura ,DFTodos,DFActualizar,DFcrear,DFUnico};
 }
