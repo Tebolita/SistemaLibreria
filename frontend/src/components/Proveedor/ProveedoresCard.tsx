@@ -1,6 +1,6 @@
 'use client';
 import * as React from "react"
-import { Grid, PlusIcon } from "lucide-react"
+import { Badge, Grid, PlusIcon } from "lucide-react"
 import useProveedores from "@/hooks/useProveedores"
 import {
   Avatar,
@@ -18,19 +18,38 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import ModalActualizarProveedor from '../Proveedor/ProveedorActualizar';
-import { useState } from "react";
+import { useState,useEffect } from "react";
 const {proveedoresTodos} = useProveedores();
-const Proveedores =  await proveedoresTodos();
+const res =  await proveedoresTodos();
+
 
 export function ProveedoresList() { 
     
 const [showModal, setShowModal] = useState(false);
+const [Proveedores, setProveedores] = useState(res);
+const [modalActual,setModalAtual] = useState(res[0]);
+function handleModal(IdProveedor: number,Telefono: string,Correo: string,contacto: string,NombreEmpresa: string) {
+    setShowModal(!showModal);
+    setModalAtual({IdProveedor,Telefono,Correo,contacto,NombreEmpresa});
+}
+function showModalFunction() {
+    setShowModal(!showModal);
+}
+useEffect(() => {
+    const fetchProveedores = async () => {
+      const response = await proveedoresTodos();
+      setProveedores(response);
+    }
+  fetchProveedores();
+  }, [showModal]);
    console.log(Proveedores);
   return (
     <div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))', gap: '20px' }}>
-        <div onClick={() => setShowModal(false)} style={{ padding: '20px', display: 'flex', justifyContent: 'end' }}>
-        {showModal && <ModalActualizarProveedor  />}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(550px, 1fr))', gap: '20px' }}>
+        <div  style={{ padding: '20px', display: 'flex', justifyContent: 'end' }}>
+        {showModal && <ModalActualizarProveedor showModal={showModalFunction}  id={modalActual.IdProveedor} NombreEmpresa = {modalActual.NombreEmpresa} 
+        contacto={modalActual.contacto}
+         Telefono={modalActual.Telefono} Correo={modalActual.Correo} />}
          </div>
       <ItemGroup>
         {Proveedores.map((proveedor : any, index : any) => (
@@ -42,13 +61,16 @@ const [showModal, setShowModal] = useState(false);
                 </Avatar>
               </ItemMedia>
               <ItemContent className="gap-1">
+                <ItemTitle>{proveedor.Contacto}</ItemTitle>
                 <ItemTitle>{proveedor.NombreEmpresa}</ItemTitle>
                 <ItemDescription>{proveedor.Telefono}</ItemDescription>
                 <ItemDescription>{proveedor.Correo}</ItemDescription>
+            
               </ItemContent>
               <ItemActions>
-            <Button onClick={() => setShowModal(true)}>Actualizar Proveedor</Button>
+            <Button defaultValue={proveedor.IdProveedor} onClick={() => handleModal(proveedor.IdProveedor,proveedor.Telefono,proveedor.Correo,proveedor.Contacto,proveedor.NombreEmpresa)}>Actualizar Proveedor</Button>
               </ItemActions>
+                {proveedor.Estado == 1 ? <Badge className="bg-green-500 cursor-pointer ml-1">Activo</Badge> : <Badge className="bg-red-500 cursor-pointer ml-1">Inactivo</Badge>}
             </Item>
             {index !== Proveedores.length - 1 && <ItemSeparator />}
           </React.Fragment>

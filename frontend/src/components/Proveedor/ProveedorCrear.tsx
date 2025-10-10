@@ -23,7 +23,7 @@ export function AgregarProveedor() {
 }
     let Data = {
         NombreEmpresa: "",
-        Contacto: " ",
+        Contacto: "",
         Telefono: "",
         Correo: "",
         Estado: true,
@@ -50,7 +50,7 @@ export function AgregarProveedor() {
             <FieldDescription>
               Agrega un contacto a la Empresa
             </FieldDescription>
-            <Input name="Descripcion" id="Descripcion" type="text" placeholder="Descripcion de la Empresa" onChange={handleOnChange} />
+            <Input name="Contacto" id="Descripcion" type="text" placeholder="Descripcion de la Empresa" onChange={handleOnChange} />
           </Field>
           <Field>
             <FieldLabel htmlFor="Telefono">Telefono</FieldLabel>

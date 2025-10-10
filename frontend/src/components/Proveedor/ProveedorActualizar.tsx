@@ -18,7 +18,7 @@ import { toast } from "sonner";
 const {proveedoresActualizar} = useProveedores();
 
 
-export default function ProveedorActualizar({id,NombreEmpresa,contacto, Telefono, Correo}: any) {
+export default function ProveedorActualizar({showModal,id,NombreEmpresa,contacto, Telefono, Correo}: any) {
     async function handleActualizarProveedor(id: number, Data: any) {
         const response = await proveedoresActualizar(id, Data);
         toast.success(response?.message);
@@ -62,7 +62,7 @@ export default function ProveedorActualizar({id,NombreEmpresa,contacto, Telefono
         </FieldGroup>
       </FieldSet>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <Button onClick={() => handleActualizarProveedor(id, Data)}>Guardar Cambios</Button>
+      <Button onClick={() => {showModal(); handleActualizarProveedor(id, Data)}}>Guardar Cambios</Button>
         </div>
     </div>
     );
