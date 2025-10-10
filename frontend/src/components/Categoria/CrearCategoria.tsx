@@ -33,8 +33,8 @@ export function CrearCategoria() {
 
 
     return (
-       <div className="w-full max-w-md" style={{alignContent: 'center'}}  >
-        <h2 className="text-2xl font-semibold mb-4">Crear Categoria</h2>
+     <div className="w-full max-w-lg mx-auto py-8"  >
+      <h2 className="text-2xl font-semibold mb-4 text-center">Crear Categoria</h2>
 
       <FieldSet>
         <FieldGroup>

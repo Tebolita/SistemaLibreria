@@ -39,8 +39,10 @@ const Menus = [
     Titulo: "Facturas",
     SubMenus: [
          { Icon: <ImagePlus />, Titulo: "Factura", ruta: "/administracion/factura" },
+          { Icon: <BookPlus />, Titulo: "Detalle Factura", ruta: "/administracion/detalleFactura" },
     ]
   }, 
+  
    {
     Titulo: "Clientes",
     SubMenus: [

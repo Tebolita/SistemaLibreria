@@ -34,8 +34,8 @@ export function AgregarProveedor() {
 
 
     return (
-       <div className="w-full max-w-md" style={{alignContent: 'center'}}  >
-        <h2 className="text-2xl font-semibold mb-4">Agregar Proveedor</h2>
+        <div className="w-full max-w-lg mx-auto py-8"  >
+        <h2 className="text-2xl font-semibold mb-4 text-center">Agregar Proveedor</h2>
       <FieldSet>
         <FieldGroup>
           <Field>
