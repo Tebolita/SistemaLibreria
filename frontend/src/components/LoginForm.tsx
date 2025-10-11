@@ -58,7 +58,7 @@ export function LoginForm() {
         setNombre(userEmail.nombreUsuario)  
         setIdCliente(userEmail.idCliente)
         if (userEmail.role === "Administrador") {
-          router.push("/producto");
+          router.push("/administracion/procesarOrdenes");
         }
 
         toast.success("Inicio de sesión exitoso", { duration: 3000 });

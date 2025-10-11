@@ -2,15 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CreateFacturaDto } from './dto/create-factura.dto';
 import { UpdateFacturaDto } from './dto/update-factura.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-
+import { EstadoFacturaService } from 'src/estado-factura/estado-factura.service';
 
 @Injectable()
 export class FacturaService {
-  constructor (private prismaService: PrismaService){}
-
+  constructor (private prismaService: PrismaService,
+    private estadoFacturaService: EstadoFacturaService)  {}
+    
   async create(createFacturaDto: CreateFacturaDto) {
     const factura = await this.prismaService.facturas.create({
       data: createFacturaDto
+    })
+    const fechaActual: Date = new Date();
+    await this.estadoFacturaService.create({
+      IdEstadoEnvio: 1,
+      IdFactura: factura.IdFactura,
+      Fecha: fechaActual
     })
 
     return {message: "Factura creada", data: factura}

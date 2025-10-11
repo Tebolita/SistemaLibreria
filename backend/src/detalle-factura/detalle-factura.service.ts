@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DetalleFacturaService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService)  {}
 
   async create(createDetalleFacturaDto: CreateDetalleFacturaDto) {
     try {
@@ -42,4 +42,6 @@ export class DetalleFacturaService {
 
     return { message: 'Detalle factura actualizado con éxito', data: detalleFactura };
   }
+
+
 }
