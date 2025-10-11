@@ -28,6 +28,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { useCategoria } from "@/hooks/useCategorias"
+import useProveedores from "@/hooks/useProveedores"
+import { useState } from "react"
+const { categoriasTodos } = useCategoria()
+const { proveedoresTodos } = useProveedores()
+
+const resCategorias = await categoriasTodos();
+const resProveedores = await proveedoresTodos();
 
 const formSchema = z.object({
   Nombre: z.string().min(2, {
@@ -48,9 +56,14 @@ const formSchema = z.object({
   IdProveedor: z.string().min(1, {
     message: "El valor ingresado no es válido.",
   }),
+  Imagen: z.string().optional(),
 })
 
 export function FProducto() {
+  
+  
+  const [categorias] = useState(resCategorias);
+  const [proveedores] = useState(resProveedores);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,6 +74,7 @@ export function FProducto() {
       Stock:"",
       IdCategoria:"",
       IdProveedor:"",
+      Imagen:"",
     },
   })
 
@@ -141,9 +155,9 @@ export function FProducto() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="1">Libro</SelectItem>
-                  <SelectItem value="2">Miselanea</SelectItem>
-                  <SelectItem value="3">Papelería</SelectItem>
+                  {categorias.map((categoria: any) => (
+                    <SelectItem key={categoria.IdCategoria} value={String(categoria.IdCategoria)}>{categoria.Nombre}</SelectItem>
+                  ))}
                 </SelectContent> 
               </Select>
               <FormMessage />
@@ -164,15 +178,28 @@ export function FProducto() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="1">BIC</SelectItem>
-                  <SelectItem value="2">Pilot</SelectItem>
-                  <SelectItem value="3">SUSAETA</SelectItem>
+                  {proveedores.map((proveedor: any) => (
+                    <SelectItem key={proveedor.IdProveedor} value={String(proveedor.IdProveedor)}>{proveedor.NombreEmpresa}</SelectItem>
+                  ))}
                 </SelectContent> 
               </Select>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="Imagen"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Imagen url:</FormLabel>
+              <FormControl>
+                <Input placeholder="Imagen url" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />        
         <Button type="submit">Registar</Button>
       </form>
     </Form>

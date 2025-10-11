@@ -36,6 +36,7 @@ export function CategoriaActualizar({idCategoria, Nombre, Descripcion}: any) {
         <Input onChange={handleOnChange} name="nombre" id="nombre" defaultValue={Nombre} />
       </div>
       <Button onClick={() => { handleActualizarCategoria(idCategoria, Data ) }} type="submit">Guardar cambios</Button>
+      <Button className="ml-5 cursor-pointer">Cancelar</Button>
     </form>
         </div>
     )

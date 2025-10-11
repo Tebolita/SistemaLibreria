@@ -48,4 +48,19 @@ export const productosService = {
     const data = await response.json();
     return data;
   },
+
+
+  async ActualizarProducto(idProducto: number, productoData: any) {
+    const response = await fetch(`${API}actualizar/${idProducto}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(productoData),
+    });
+    const res = await response.json();
+    return res;
+  },
+
+
 };

@@ -34,13 +34,13 @@ export default function ProveedorActualizar({showModal,id,NombreEmpresa,contacto
        Data = {...Data, [e.target.name]: e.target.value}
     }
     
-    return (  <div style={{height: '400px', border: '1px solid #000000ff', borderRadius: '8px', padding: '20px'}} className="w-full max-w-md space-y-6">
-      <FieldSet>
+    return (  <div style={{height: '400px', border: '1px solid #f4f4f4ff', borderRadius: '8px', padding: '20px'}} className="w-full max-w-md space-y-6 bg-white/50 backdrop-blur-lg p-6 rounded-lg shadow-lg">
+      <FieldSet >
         <FieldLegend>{NombreEmpresa}</FieldLegend>
         <FieldDescription>
           
         </FieldDescription>
-        <FieldGroup>
+        <FieldGroup >
             <Field>
             <FieldLabel htmlFor="street">Nombre Empresa</FieldLabel>
             <Input name="NombreEmpresa" id="street" type="text" placeholder="Nombre de la empresa"  defaultValue={NombreEmpresa} onChange={handleOnChange} />
@@ -62,7 +62,8 @@ export default function ProveedorActualizar({showModal,id,NombreEmpresa,contacto
         </FieldGroup>
       </FieldSet>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <Button onClick={() => {showModal(); handleActualizarProveedor(id, Data)}}>Guardar Cambios</Button>
+      <Button onClick={() => {showModal(); handleActualizarProveedor(id, Data)}} className="cursor-pointer">Guardar Cambios</Button>
+      <Button onClick={() => {showModal();}} className="ml-5 cursor-pointer">Cancelar</Button>
         </div>
     </div>
     );

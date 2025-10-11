@@ -10,7 +10,7 @@ export function useProductos() {
         IdProveedor: parseInt(productoData.IdProveedor),
         Stock: parseInt(productoData.Stock),
         Estado: true,
-        Imagen: "Holaaa prueba",
+        Imagen: productoData.Imagen || "",
       };
 
       const response = await productosService.CrearProducto(dataClean);
@@ -58,5 +58,25 @@ export function useProductos() {
     }
   };
 
-  return { ProductosTodos, CrearProducto, ProductosPorCategoria, obtenerUnico, ObtenerActivos };
+  const ActualizarProducto = async (idProducto: number, productoData: any) => {
+    try {
+      const dataClean = {
+        ...productoData,
+        Precio: parseFloat(productoData.Precio),
+        IdCategoria: parseInt(productoData.IdCategoria),
+        IdProveedor: parseInt(productoData.IdProveedor),
+        Stock: parseInt(productoData.Stock),
+        Estado: true,
+        Imagen: productoData.Imagen || "",
+      };
+
+      const response = await productosService.ActualizarProducto(idProducto, dataClean);
+      return response ? response : "";
+    } catch (error) {
+      return { error: error, message: "Hubo un error en el servidor" };
+    }
+  };
+
+
+  return { ProductosTodos, CrearProducto, ProductosPorCategoria, obtenerUnico, ObtenerActivos, ActualizarProducto };
 }

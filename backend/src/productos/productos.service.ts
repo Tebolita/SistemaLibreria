@@ -30,11 +30,13 @@ export class ProductosService {
       Stock: true,
       Categorias: {
         select: {
+          IdCategoria: true,
           Nombre: true,
         }
       },
       Proveedores: {
         select: {
+          IdProveedor: true,
           NombreEmpresa: true
         }
       },
