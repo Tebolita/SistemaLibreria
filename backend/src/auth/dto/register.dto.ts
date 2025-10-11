@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Usuarios } from "@prisma/client";
 import { Transform } from 'class-transformer';
 
-export type CreateRegisterDto = Omit<Usuarios, 'IdUsuario' | 'IdRol' | 'createdAt' | 'updatedAt'>;
+export type CreateRegisterDto = Omit<Usuarios, 'IdUsuario' | 'IdCliente' | 'IdRol' | 'createdAt' | 'updatedAt'>;
 
 export class ValidateRegisterDto {
 

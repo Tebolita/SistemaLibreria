@@ -13,7 +13,7 @@ const Menus = [
   {
     Titulo: "Ordenes Pendietes",
     SubMenus: [
-      { Icon: <Package />, Titulo: "Procesar ordenes", ruta: "/procesar" },
+      { Icon: <Package />, Titulo: "Procesar ordenes", ruta: "/administracion/procesarOrdenes" },
     ]
   },  
   {

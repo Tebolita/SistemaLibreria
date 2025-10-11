@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useFacturas } from "@/hooks/useFacturas";
 import { useLogin } from "@/context/loginContext";
+import { useClientes } from "@/hooks/useClientes";
 
 
 export default function CheckoutPage() {
@@ -16,17 +17,29 @@ export default function CheckoutPage() {
 
   const [carrito, setCarrito] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const [cliente, setCliente] = useState({
-    nombre: "",
-    direccion: "",
-    telefono: "",
-  });
   const [pago, setPago] = useState("efectivo");
   const [compraFinalizada, setCompraFinalizada] = useState(false);
   const [numSeguimiento, setNumSeguimiento] = useState("");
+  const [clienteUnico, setClienteUnico] = useState<any>([]);
+  const { unico } = useClientes()
+
+  const { nombreUsuario, setshowLoginForm, nombre, idCliente, idUsuario } = useLogin()
+  useEffect(()  => {
+      async function GetCliente() {
+      const cliete = await unico(parseInt(idCliente)) ;
+      setClienteUnico(cliete);
+    }
+    GetCliente();  
+  }, [idCliente])
+  
+  console.log(clienteUnico)
+  const [cliente, setCliente] = useState({
+    nombre: nombre,
+    direccion: clienteUnico?.Direccion,
+    telefono: clienteUnico?.Telefono,
+  });
 
 
-  const { nombreUsuario, setshowLoginForm, nombre } = useLogin()
   console.log(nombre  )
   // 🧩 Cargar carrito
   useEffect(() => {
@@ -59,10 +72,10 @@ export default function CheckoutPage() {
           try {
             // 1️⃣ Crear la factura principal
             const datosFactura = {
-              IdCliente: 1, // Luego puedes vincularlo al usuario real
+              IdCliente:parseInt(idCliente), 
               Fecha: new Date().toISOString(),
               Total: total,
-              IdUsuario: 1,
+              IdUsuario: parseInt(idUsuario),
               IdMetodoPago: pago === "efectivo" ? 1 : 2,
             };
 
@@ -87,7 +100,7 @@ export default function CheckoutPage() {
                 Subtotal: p.precio * p.cantidad,
                 IdEstanteria: 1, // fijo por ahora
               };
-
+              console.log(detalle)
               const respuestaDetalle = await crearDetalleFactura(detalle);
 
               if (!respuestaDetalle.ok) {
@@ -183,21 +196,21 @@ export default function CheckoutPage() {
         <div className="space-y-3">
           <Input
             placeholder="Nombre completo"
-            value={ nombre }
+            value={nombre ? nombre : ""}
             onChange={(e) =>
               setCliente({ ...cliente, nombre: e.target.value })
             }
           />
           <Input
             placeholder="Dirección de entrega"
-            value={cliente.direccion}
+            value={cliente.direccion ? cliente.direccion : ""}
             onChange={(e) =>
               setCliente({ ...cliente, direccion: e.target.value })
             }
           />
           <Input
             placeholder="Teléfono de contacto"
-            value={cliente.telefono}
+            value={cliente.telefono ? cliente.telefono : ""}
             onChange={(e) =>
               setCliente({ ...cliente, telefono: e.target.value })
             }

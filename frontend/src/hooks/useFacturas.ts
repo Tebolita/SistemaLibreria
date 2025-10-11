@@ -62,5 +62,18 @@ export function useFacturas() {
     }
   };
 
-  return { todos, crearFactura, crearDetalleFactura };
+
+  const Detalle = async (idFactura: number) => {
+    try {
+        const facturaDetalle = await facturasServices.detalles(idFactura);
+        return facturaDetalle;
+    } catch (error) {
+        console.error("Error fetching detalles:", error);
+        return [];
+    }
+  };  
+
+
+
+  return { todos, crearFactura, crearDetalleFactura, Detalle };
 }

@@ -12,7 +12,8 @@ interface LoginContextType {
   setIdUsuario: React.Dispatch<React.SetStateAction<string>>;
   nombre: string;
   setNombre: React.Dispatch<React.SetStateAction<string>>;
-
+  idCliente: string;
+  setIdCliente: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Creamos el contexto
@@ -25,6 +26,7 @@ export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [showLoginForm, setshowLoginForm] = useState<boolean>(false);
   const [idUsuario, setIdUsuario] = useState<string>("")
   const [nombre, setNombre] = useState<string>("")
+  const [idCliente, setIdCliente] = useState<string>("")
 
   return (
     <LoginContext.Provider
@@ -38,7 +40,9 @@ export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         idUsuario,
         setIdUsuario,
         nombre,
-        setNombre
+        setNombre,
+        idCliente, 
+        setIdCliente
       }}
     >
       {children}

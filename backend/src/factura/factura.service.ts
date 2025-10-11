@@ -70,4 +70,28 @@ export class FacturaService {
 
     return {message: "Datos actualizados con exito", data: factura}
   }
+
+
+  async devolverDetalleYProductos(idCliente: number){
+    const facturaDetalle = await this.prismaService.facturas.findMany({
+      where: {
+        IdCliente: idCliente
+      },
+      select: {
+        IdFactura: true,
+        DetalleFactura: {
+          select: {
+            Productos: {select: {Nombre: true, Imagen: true}},
+            Cantidad: true,
+            PrecioUnitario: true,
+            Subtotal: true
+          }
+        }
+      }
+    })
+
+    return { facturaDetalle }
+  }
+
+
 }

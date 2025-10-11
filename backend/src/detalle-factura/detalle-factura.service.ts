@@ -9,16 +9,9 @@ export class DetalleFacturaService {
 
   async create(createDetalleFacturaDto: CreateDetalleFacturaDto) {
     try {
-      const detalleFactura = await this.prismaService.detalleFactura.create({
-        data: {
-          IdFactura: createDetalleFacturaDto.IdFactura,
-          IdProducto: createDetalleFacturaDto.IdProducto,
-          Cantidad: createDetalleFacturaDto.Cantidad,
-          PrecioUnitario: createDetalleFacturaDto.PrecioUnitario?.toString(), // 🔹 Convertimos a string para Decimal
-          Subtotal: createDetalleFacturaDto.Subtotal?.toString(),             // 🔹 Igual aquí
-          IdEstanteria: createDetalleFacturaDto.IdEstanteria,
-        },
-      });
+    const detalleFactura = await this.prismaService.detalleFactura.create({
+      data: createDetalleFacturaDto
+    })
 
       return { message: 'Detalle factura creado con éxito ✅', data: detalleFactura };
     } catch (error) {

@@ -16,7 +16,14 @@ export class FacturaController {
     findAll() {
       return this.facturaService.findAll();
     } 
-  
+
+  @Get('detalles/:idCliente')
+  devolverDetalleYProductos(@Param('idCliente') idCliente: number) {
+    return this.facturaService.devolverDetalleYProductos(idCliente);
+  }
+
+
+
     @Get('unico/:id')
     findOne(@Param('id') id: string) {
       return this.facturaService.findOne(+id);

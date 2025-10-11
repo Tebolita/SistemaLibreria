@@ -41,7 +41,7 @@ export class AuthService {
         return { message: 'Email is required' };
       }
   
-      const payload = { correo: user.Correo, username: user.Usuario, role: rol?.NombreRol, idUser: user.IdUsuario, nombreUsuario: user.Nombre };
+      const payload = { correo: user.Correo, username: user.Usuario, role: rol?.NombreRol, idUser: user.IdUsuario, nombreUsuario: user.Nombre, idCliente: user.IdCliente };
       return {
         access_token: await this.jwtService.signAsync(payload),
       };
@@ -57,11 +57,19 @@ export class AuthService {
         return { error: `Complete the data` };
       }
 
-      const usuarioExiste = await this.usersService.findOne(Correo, Usuario)
-      if (usuarioExiste){
-        return {message: "Correo o usuario ya registrado, por favor de utilizar otro"}
-      }
+      // const usuarioExiste = await this.usersService.findOne(Correo, Usuario)
+      // if (usuarioExiste){
+      //   return {message: "Correo o usuario ya registrado, por favor de utilizar otro"}
+      // }
 
+      const cliente = await this.clientesService.create({
+        Correo: Correo,
+        Estado: true,
+        NombreCompleto: Nombre,
+        Direccion: "",
+        Telefono: "",
+      }) 
+      
       await this.prismaService.usuarios.create({
         data: {
             Nombre: Nombre,
@@ -70,6 +78,7 @@ export class AuthService {
             Correo: Correo,
             Estado: true,
             IdRol: 2,
+            IdCliente: cliente.data.IdCliente,
         }
       });
 
@@ -78,13 +87,7 @@ export class AuthService {
         where: { Usuario: Usuario },
       });
       
-      this.clientesService.create({
-        Correo: Correo,
-        Estado: true,
-        NombreCompleto: Nombre,
-        Direccion: "",
-        Telefono: "",
-      })
+
       
       return {
         message: 'User created successfully',

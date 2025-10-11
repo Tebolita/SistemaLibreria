@@ -54,7 +54,8 @@ export function useDetalleFactura() {
       return [];
     }
   };
-const DFTodos = async () => {
+
+    const DFTodos = async () => {
             try {
                 const proveedores = await DetallefacturaServices.todos();
                 return proveedores;

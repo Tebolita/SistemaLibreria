@@ -25,7 +25,8 @@ export function LoginForm() {
     setNombreUsuario,
     setCorreoUsuario,
     setIdUsuario,
-    setNombre
+    setNombre,
+    setIdCliente,
   } = useLogin();
 
   const router = useRouter();
@@ -55,6 +56,7 @@ export function LoginForm() {
         setIdUsuario(userEmail.idUser)
         setRole(userEmail.role)
         setNombre(userEmail.nombreUsuario)  
+        setIdCliente(userEmail.idCliente)
         if (userEmail.role === "Administrador") {
           router.push("/producto");
         }

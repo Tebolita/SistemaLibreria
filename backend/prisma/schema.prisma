@@ -23,6 +23,7 @@ model Clientes {
   Direccion      String?    @db.Text
   Estado         Boolean    @default(true, map: "DF__Clientes__Estado__6E01572D")
   Facturas       Facturas[]
+  Usuarios       Usuarios[]
 }
 
 model DetalleFactura {
@@ -36,6 +37,22 @@ model DetalleFactura {
   Estanteria     Estanteria? @relation(fields: [IdEstanteria], references: [idEstanteria], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdBod__6B24EA82")
   Facturas       Facturas?   @relation(fields: [IdFactura], references: [IdFactura], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdFac__4D94879B")
   Productos      Productos?  @relation(fields: [IdProducto], references: [IdProducto], onDelete: NoAction, onUpdate: NoAction, map: "FK__DetalleFa__IdPro__4E88ABD4")
+}
+
+model EstadoEnvio {
+  IdEstadoEnvio Int             @id(map: "PK__EstadoEn__4BDFBA47C0483E5A") @default(autoincrement())
+  NombreEstado  String          @db.NVarChar(50)
+  Descripcion   String?         @db.NVarChar(200)
+  EstadoFactura EstadoFactura[]
+}
+
+model EstadoFactura {
+  IdEstadoFactura Int          @id(map: "PK__EstadoFa__D1BC26E77D2E7BFD") @default(autoincrement())
+  IdEstadoEnvio   Int?
+  IdFactura       Int?
+  Fecha           DateTime?    @db.Date
+  EstadoEnvio     EstadoEnvio? @relation(fields: [IdEstadoEnvio], references: [IdEstadoEnvio], onDelete: NoAction, onUpdate: NoAction, map: "FK_EstadoFactura_EstadoEnvio")
+  Facturas        Facturas?    @relation(fields: [IdFactura], references: [IdFactura], onDelete: NoAction, onUpdate: NoAction, map: "FK_IdFactura_Facturas")
 }
 
 model Estanteria {
@@ -58,6 +75,7 @@ model Facturas {
   IdUsuario      Int?
   IdMetodoPago   Int?
   DetalleFactura DetalleFactura[]
+  EstadoFactura  EstadoFactura[]
   Clientes       Clientes?        @relation(fields: [IdCliente], references: [IdCliente], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdClie__48CFD27E")
   MetodosPago    MetodosPago?     @relation(fields: [IdMetodoPago], references: [IdMetodoPago], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdMeto__4AB81AF0")
   Usuarios       Usuarios?        @relation(fields: [IdUsuario], references: [IdUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK__Facturas__IdUsua__49C3F6B7")
@@ -169,6 +187,8 @@ model Usuarios {
   IdRol      Int?
   Correo     String?    @db.VarChar(100)
   Estado     Boolean    @default(true, map: "DF__Usuarios__Estado__71D1E811")
+  IdCliente  Int?
   Facturas   Facturas[]
   Roles      Roles?     @relation(fields: [IdRol], references: [IdRol], onDelete: NoAction, onUpdate: NoAction, map: "FK__Usuarios__IdRol__3A81B327")
+  Clientes   Clientes?  @relation(fields: [IdCliente], references: [IdCliente], onDelete: NoAction, onUpdate: NoAction, map: "FK_Usuarios_Clientes")
 }

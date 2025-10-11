@@ -56,4 +56,14 @@ export const facturasServices = {
       throw error;
     }
   },
+
+    async detalles(id: any){
+        const res = await fetch(`${API}detalles/${id}`, {
+            method: 'GET',
+        } ) 
+        return res.json()
+    },
+
+
+
 };

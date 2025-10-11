@@ -8,6 +8,7 @@ export const DetallefacturaServices ={
         } )
         return DetalleFacturas.json()
     },
+
     async crear(datos: any) {
         const res = await fetch(`${API}crear`, {
             method: 'POST',
