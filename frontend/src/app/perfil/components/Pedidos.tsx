@@ -25,8 +25,8 @@ export default function Pedidos() {
       {pedidos.length === 0 ? (
         <p className="text-gray-500">Aún no tienes pedidos registrados.</p>
       ) : (
-        pedidos.map((pedido: any) => (
-          <Card key={pedido.IdFactura} className="p-6 shadow-sm space-y-4">
+        pedidos.map((pedido: any, index) => (
+          <Card key={index} className="p-6 shadow-sm space-y-4">
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-sm text-gray-500">Factura</p>
@@ -42,7 +42,7 @@ export default function Pedidos() {
                 Producto ID: {pedido.IdProducto} — Cantidad: {pedido.Cantidad}
               </p>
               <p className="text-sm text-gray-700">
-                Subtotal: Q{pedido.Subtotal.toFixed(2)}
+                Subtotal: Q{ parseFloat(pedido.Subtotal).toFixed(2)}
               </p>
             </div>
 

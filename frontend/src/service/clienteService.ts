@@ -19,5 +19,11 @@ export const clienteService = {
         const res = await cliente.json()
         return res
     },
+    async unico(id: number) {
+        const clientes = await fetch(`${API}unico/${id}`, {
+            method: 'GET',
+        } )
+        return clientes.json()
+    },    
 
 }

@@ -83,7 +83,6 @@ function NavBar() {
   const administracionSettings = () => router.push("/producto");
   const UsuarioSettings = () => router.push("/perfil");
 
-  // ✅ Cargar categorías al montar y cuando cambie la ruta
   useEffect(() => {
     const loadCategorias = async () => {
       try {
@@ -187,37 +186,39 @@ function NavBar() {
           </Button>
           {role === "Administrador" 
           ? 
-          <Button asChild variant="ghost" className="hidden md:inline-flex">
-            <span
-              onClick={administracionSettings}
-              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
-            >
-              <Settings className="size-4 text-sky-600" />
-              <span>Administrar sistema</span>
-            </span>
-          </Button>
+            <Button asChild variant="ghost" className="hidden md:inline-flex">
+              <span
+                onClick={administracionSettings}
+                className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
+              >
+                <Settings className="size-4 text-sky-600" />
+                <span>Administrar sistema</span>
+              </span>
+            </Button>
           
           :
-          role !== "Administrador" && role !== "guest" ?  
-          <Button asChild variant="ghost" className="hidden md:inline-flex">
-            <span
-              onClick={UsuarioSettings}
-              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
-            >
-              <Settings className="size-4 text-sky-600" />
-              <span>Mi usuario</span>
-            </span>
-          </Button>                  
+            role != "Administrador" && role != "guest" 
+            ?  
+            <Button asChild variant="ghost" className="hidden md:inline-flex">
+              <span
+                onClick={UsuarioSettings}
+                className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
+              >
+                <Settings className="size-4 text-sky-600" />
+                <span>Mi usuario</span>
+              </span>
+            </Button>                  
           :
-          <Button asChild variant="ghost" className="hidden md:inline-flex">
-            <span
-              onClick={nuevoUsuario}
-              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
-            >
-              <UserPlus2Icon className="size-4 text-sky-600" />
-              <span>CrearCuenta</span>
-            </span>
-          </Button>}
+            <Button asChild variant="ghost" className="hidden md:inline-flex">
+              <span
+                onClick={nuevoUsuario}
+                className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.05]"
+              >
+                <UserPlus2Icon className="size-4 text-sky-600" />
+                <span>Crear Cuenta</span>
+              </span>
+            </Button>
+          }
 
           <Button
             asChild

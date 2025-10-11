@@ -6,6 +6,7 @@ import { CreateRoleDto } from './dto/role.dto';
 import { Injectable } from '@nestjs/common';
 import { ValidateTokenDto } from './dto/validateToken.dto';
 import { RolesService } from 'src/roles/roles.service';
+import { ClientesService } from 'src/clientes/clientes.service';
 
 import * as bcryptjs from 'bcryptjs';
 
@@ -16,6 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
     private prismaService: PrismaService,
     private rolesService: RolesService,
+    private clientesService: ClientesService,
   ) {}
 
   // Use to sign in a user
@@ -29,8 +31,7 @@ export class AuthService {
       if (!user) {
         return { message: 'User not found' };
       }
-      const rol = await this.rolesService.findOne(user.IdRol || 5);
-      
+      const rol = await this.rolesService.findOne(user.IdRol || 0);
       const isPasswordValid = await bcryptjs.compare(Contrasena, user.Contrasena || '');
       if (!isPasswordValid) {
         return { message: 'Password is incorrect' };
@@ -40,7 +41,7 @@ export class AuthService {
         return { message: 'Email is required' };
       }
   
-      const payload = { sub: user.Correo, username: user.Usuario, role: rol?.NombreRol };
+      const payload = { correo: user.Correo, username: user.Usuario, role: rol?.NombreRol, idUser: user.IdUsuario, nombreUsuario: user.Nombre };
       return {
         access_token: await this.jwtService.signAsync(payload),
       };
@@ -55,28 +56,43 @@ export class AuthService {
       if (!Nombre || !Correo || !Usuario || !Contrasena ) {
         return { error: `Complete the data` };
       }
-  
-      const createdUser = await this.prismaService.usuarios.create({
+
+      const usuarioExiste = await this.usersService.findOne(Correo, Usuario)
+      if (usuarioExiste){
+        return {message: "Correo o usuario ya registrado, por favor de utilizar otro"}
+      }
+
+      await this.prismaService.usuarios.create({
         data: {
-          Nombre: Nombre,
-          Usuario: Usuario,
-          Contrasena: await bcryptjs.hash(Contrasena, 10),
-          Correo: Correo,
-          IdRol: 2
-        },
+            Nombre: Nombre,
+            Usuario: Usuario,
+            Contrasena: await bcryptjs.hash(Contrasena, 10),
+            Correo: Correo,
+            Estado: true,
+            IdRol: 2,
+        }
       });
-  
-        // Consultar el usuario recién insertado
-        const user = await this.prismaService.usuarios.findUnique({
-          where: { Usuario: Usuario },
-        });
-  
-        return {
-          message: 'User created successfully',
-          idt_usuarios: user?.IdUsuario,
-          idHash: await bcryptjs.hash(user!.IdUsuario.toString(), 10),
-        };
+
+      // Consultar el usuario recién insertado
+      const user = await this.prismaService.usuarios.findUnique({
+        where: { Usuario: Usuario },
+      });
+      
+      this.clientesService.create({
+        Correo: Correo,
+        Estado: true,
+        NombreCompleto: Nombre,
+        Direccion: "",
+        Telefono: "",
+      })
+      
+      return {
+        message: 'User created successfully',
+        idt_usuarios: user?.IdUsuario,
+        idHash: await bcryptjs.hash(user!.IdUsuario.toString(), 10),
+      };
     } catch (error) {
+      console.log(error)
       return { error: `Internal Server Error ${error}` };
     }
   }

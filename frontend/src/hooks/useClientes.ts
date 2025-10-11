@@ -10,9 +10,15 @@ export const useClientes = () => {
         const res = await clienteService.cambiarEstado(id);
         return res;
     };
+    const unico = async (id: number) => {
+        const clientes = await clienteService.unico(id);
+        return clientes;
+    };
+
 
     return {
         todos,
-        cambiarEstado
+        cambiarEstado,
+        unico
     };
 }

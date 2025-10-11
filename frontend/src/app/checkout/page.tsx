@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useFacturas } from "@/hooks/useFacturas";
+import { useLogin } from "@/context/loginContext";
 
-const API = "http://localhost:4000/api/";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -25,6 +25,9 @@ export default function CheckoutPage() {
   const [compraFinalizada, setCompraFinalizada] = useState(false);
   const [numSeguimiento, setNumSeguimiento] = useState("");
 
+
+  const { nombreUsuario, setshowLoginForm, nombre } = useLogin()
+  console.log(nombre  )
   // 🧩 Cargar carrito
   useEffect(() => {
     const items = getCart();
@@ -48,64 +51,69 @@ export default function CheckoutPage() {
 
   // 🛍️ Confirmar compra
   const confirmarCompra = async () => {
-    if (!cliente.nombre || !cliente.direccion || !cliente.telefono) {
-      toast.error("Por favor completa todos los campos del cliente.");
-      return;
+    if (nombreUsuario != ""){
+      if (!cliente.nombre || !cliente.direccion || !cliente.telefono) {
+            toast.error("Por favor completa todos los campos del cliente.");
+            return;
+          }
+          try {
+            // 1️⃣ Crear la factura principal
+            const datosFactura = {
+              IdCliente: 1, // Luego puedes vincularlo al usuario real
+              Fecha: new Date().toISOString(),
+              Total: total,
+              IdUsuario: 1,
+              IdMetodoPago: pago === "efectivo" ? 1 : 2,
+            };
+
+            const respuestaFactura = await crearFactura(datosFactura);
+
+            console.log("🧾 Respuesta completa factura:", respuestaFactura);
+
+            if (!respuestaFactura.ok) {
+              throw new Error(respuestaFactura.message);
+            }
+
+            const idFactura = respuestaFactura.facturaId;
+            toast.success(`Factura #${idFactura} creada correctamente ✅`);
+
+            // 2️⃣ Crear los detalles de factura
+            for (const p of carrito) {
+              const detalle = {
+                IdFactura: idFactura,
+                IdProducto: p.idProducto,
+                Cantidad: p.cantidad,
+                PrecioUnitario: p.precio,
+                Subtotal: p.precio * p.cantidad,
+                IdEstanteria: 1, // fijo por ahora
+              };
+
+              const respuestaDetalle = await crearDetalleFactura(detalle);
+
+              if (!respuestaDetalle.ok) {
+                console.error("❌ Error creando detalle:", respuestaDetalle);
+                throw new Error("Error al crear un detalle de factura.");
+              }
+            }
+
+            // 3️⃣ Generar número de seguimiento
+            const seguimiento = generarSeguimiento();
+            setNumSeguimiento(seguimiento);
+
+            // 4️⃣ Vaciar carrito y marcar compra finalizada
+            clearCart();
+            setCompraFinalizada(true);
+
+            toast.success("Compra registrada con éxito 🛒");
+          } catch (error: any) {
+            console.error("🚨 Error al procesar la compra:", error);
+            toast.error("Error al procesar la compra. Ver consola para detalles.");
+          }
+    }else{
+      toast.error("Por favor de iniciar sesion primero");
+      setshowLoginForm(true)
     }
-
-    try {
-      // 1️⃣ Crear la factura principal
-      const datosFactura = {
-        IdCliente: 1, // Luego puedes vincularlo al usuario real
-        Fecha: new Date().toISOString(),
-        Total: total,
-        IdUsuario: 1,
-        IdMetodoPago: pago === "efectivo" ? 1 : 2,
-      };
-
-      const respuestaFactura = await crearFactura(datosFactura);
-
-      console.log("🧾 Respuesta completa factura:", respuestaFactura);
-
-      if (!respuestaFactura.ok) {
-        throw new Error(respuestaFactura.message);
-      }
-
-      const idFactura = respuestaFactura.facturaId;
-      toast.success(`Factura #${idFactura} creada correctamente ✅`);
-
-      // 2️⃣ Crear los detalles de factura
-      for (const p of carrito) {
-        const detalle = {
-          IdFactura: idFactura,
-          IdProducto: p.idProducto,
-          Cantidad: p.cantidad,
-          PrecioUnitario: p.precio,
-          Subtotal: p.precio * p.cantidad,
-          IdEstanteria: 1, // fijo por ahora
-        };
-
-        const respuestaDetalle = await crearDetalleFactura(detalle);
-
-        if (!respuestaDetalle.ok) {
-          console.error("❌ Error creando detalle:", respuestaDetalle);
-          throw new Error("Error al crear un detalle de factura.");
-        }
-      }
-
-      // 3️⃣ Generar número de seguimiento
-      const seguimiento = generarSeguimiento();
-      setNumSeguimiento(seguimiento);
-
-      // 4️⃣ Vaciar carrito y marcar compra finalizada
-      clearCart();
-      setCompraFinalizada(true);
-
-      toast.success("Compra registrada con éxito 🛒");
-    } catch (error: any) {
-      console.error("🚨 Error al procesar la compra:", error);
-      toast.error("Error al procesar la compra. Ver consola para detalles.");
-    }
+    
   };
 
   // ✅ Vista final si la compra terminó
@@ -175,7 +183,7 @@ export default function CheckoutPage() {
         <div className="space-y-3">
           <Input
             placeholder="Nombre completo"
-            value={cliente.nombre}
+            value={ nombre }
             onChange={(e) =>
               setCliente({ ...cliente, nombre: e.target.value })
             }

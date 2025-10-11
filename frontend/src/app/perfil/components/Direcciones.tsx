@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Trash2, MapPin, Pencil } from "lucide-react";
+import { useClientes } from "@/hooks/useClientes";
 
 export default function Direcciones() {
   const [direcciones, setDirecciones] = useState([

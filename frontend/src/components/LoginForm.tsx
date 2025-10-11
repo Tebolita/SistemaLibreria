@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { login, GetEmail } from "@/Apis/login.api";
 import { useLogin } from "@/context/loginContext";
+import { useUserRole } from "@/hooks/UserRole";
 
 export function LoginForm() {
   const [usuario, setUsuario] = useState("");
@@ -23,14 +24,17 @@ export function LoginForm() {
     nombreUsuario,
     setNombreUsuario,
     setCorreoUsuario,
+    setIdUsuario,
+    setNombre
   } = useLogin();
 
   const router = useRouter();
 
+
   const toggleLogin = () => {
     setshowLoginForm(!showLoginForm);
   };
-
+  const { setRole } = useUserRole()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -47,8 +51,10 @@ export function LoginForm() {
 
         // ✅ Guardamos en el contexto global
         setNombreUsuario(userEmail.username);
-        setCorreoUsuario(userEmail.email);
-
+        setCorreoUsuario(userEmail.correo);
+        setIdUsuario(userEmail.idUser)
+        setRole(userEmail.role)
+        setNombre(userEmail.nombreUsuario)  
         if (userEmail.role === "Administrador") {
           router.push("/producto");
         }
@@ -73,6 +79,7 @@ export function LoginForm() {
     Cookies.remove("authToken");
     setNombreUsuario("");
     setCorreoUsuario("");
+    setRole("guest")
     router.push("/");
   };
 

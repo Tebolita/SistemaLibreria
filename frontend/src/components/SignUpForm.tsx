@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { ShoppingBagIcon, LucidePackageSearch, Package, ClipboardClockIcon } from "lucide-react"
 import { Register } from "@/Apis/login.api"
 import { toast, Toaster } from "sonner"
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
   const [nombre, setNombre] = useState("")
@@ -16,7 +17,7 @@ export function SignUpForm() {
   const [contrasena, setContrasena] = useState("")
   const [repetirContrasena, setRepetirContrasena] = useState("")
   const [loading, setLoading] = useState(false)
-
+  const router  = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (contrasena !== repetirContrasena) {
@@ -31,11 +32,12 @@ export function SignUpForm() {
         Contrasena: contrasena,
         Usuario: usuario
       })
+      console.log(res)
       if (res.message) {
         toast.error(res.message, { duration: 3000 })
       } else {
         toast.success("Cuenta creada exitosamente", { duration: 3000 })
-        // Puedes redirigir aquí si lo deseas
+        router.push("/")
       }
     } catch (error: any) {
       toast.error(error?.message || "Error al registrar", { duration: 3000 })

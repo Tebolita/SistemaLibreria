@@ -11,14 +11,16 @@ import { useLogin } from "@/context/loginContext"
 
 const Menus = [
   {
+    Titulo: "Ordenes Pendietes",
+    SubMenus: [
+      { Icon: <Package />, Titulo: "Procesar ordenes", ruta: "/procesar" },
+    ]
+  },  
+  {
     Titulo: "Producto",
     SubMenus: [
       { Icon: <Package />, Titulo: "Producto", ruta: "/producto" },
-      { Icon: <Package />, Titulo: "Agregar Producto", ruta: "/producto/agregarProducto" },
-      { Icon: <PackageSearch />, Titulo: "Buscar Producto", ruta: "/buscarproducto" },
-      { Icon: <PackageMinus />, Titulo: "Eliminar Producto", ruta: "/eliminarproducto" },
-      { Icon: <PackageOpen />, Titulo: "Actualizar Producto", ruta: "/actualizarproducto" },
-      { Icon: <PackageOpen />, Titulo: "Mostrar Productos", ruta: "/mostrarproductos" }
+      { Icon: <Package />, Titulo: "Agregar Producto", ruta: "/producto/agregarProducto" }
     ]
   },
   {
