@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductosPopulares } from "@/components/ProductosPopulares";
+
 import { NavBar, HeroCarousel } from "@/components/CarrouselYNavBar";
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
     <>
     <NavBar />
     <HeroCarousel />
-    <ProductosPopulares/>
+   
    </>
   );
 }
