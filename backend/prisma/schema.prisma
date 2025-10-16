@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -191,4 +192,17 @@ model Usuarios {
   Facturas   Facturas[]
   Roles      Roles?     @relation(fields: [IdRol], references: [IdRol], onDelete: NoAction, onUpdate: NoAction, map: "FK__Usuarios__IdRol__3A81B327")
   Clientes   Clientes?  @relation(fields: [IdCliente], references: [IdCliente], onDelete: NoAction, onUpdate: NoAction, map: "FK_Usuarios_Clientes")
+}
+
+view Totales {
+  Factura                Int?
+  TotalProductosVendidos Int?
+  TotalMonetarioVendido  Decimal?  @db.Decimal(38, 2)
+  Fecha                  DateTime? @db.Date
+}
+
+view TotalesDia {
+  TotalVendido   Decimal?  @db.Decimal(38, 2)
+  TotalProductos Int?
+  Fecha          DateTime? @db.Date
 }

@@ -18,11 +18,12 @@ import { ProveedoresModule } from './proveedores/proveedores.module';
 import { TrasladosEstanteriaModule } from './traslados-estanteria/traslados-estanteria.module';
 import { EstadoEnvioModule } from './estado-envio/estado-envio.module';
 import { EstadoFacturaModule } from './estado-factura/estado-factura.module';
+import { InformesModule } from './informes/informes.module';
 
 
 
 @Module({
-  imports: [AuthModule, FilesModule, UsersModule, RolesModule, ProductosModule, CategoriasModule, EstanteriaModule, ClientesModule, DetalleFacturaModule, FacturaModule, InventarioEstanteriaModule, KardexModule, MetodosPagoModule, MovimientosEstanteriaModule, ProveedoresModule, TrasladosEstanteriaModule, EstadoEnvioModule, EstadoFacturaModule],
+  imports: [AuthModule, FilesModule, UsersModule, RolesModule, ProductosModule, CategoriasModule, EstanteriaModule, ClientesModule, DetalleFacturaModule, FacturaModule, InventarioEstanteriaModule, KardexModule, MetodosPagoModule, MovimientosEstanteriaModule, ProveedoresModule, TrasladosEstanteriaModule, EstadoEnvioModule, EstadoFacturaModule, InformesModule],
   controllers: [],
   providers: [PrismaService],
 })
