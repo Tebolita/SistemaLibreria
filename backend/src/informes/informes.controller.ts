@@ -7,7 +7,7 @@ import { UpdateInformeDto } from './dto/update-informe.dto';
 export class InformesController {
   constructor(private readonly informesService: InformesService) {}
 
-  @Post()
+  /*@Post()
   create(@Body() createInformeDto: CreateInformeDto) {
     return this.informesService.create(createInformeDto);
   }
@@ -30,5 +30,14 @@ export class InformesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.informesService.remove(+id);
+  }*/
+
+  @Get('totales')
+  obtenerTotales() {
+    return this.informesService.obtenerTotales();
+  }
+  @Get('totalesDia')
+  obtenerTotalesDia() {
+    return this.informesService.obtenerTotalesDia();
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateInformeDto } from './dto/create-informe.dto';
-// import { UpdateInformeDto } from './dto/update-informe.dto';
+//import { CreateInformeDto } from './dto/create-informe.dto';
+//import { UpdateInformeDto } from './dto/update-informe.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -8,8 +8,8 @@ export class InformesService {
   
   constructor(private prismaService: PrismaService) {}
   
-  /*
-  create(createInformeDto: CreateInformeDto) {
+  
+  /*create(createInformeDto: CreateInformeDto) {
     return 'This action adds a new informe';
   }
 
@@ -30,27 +30,22 @@ export class InformesService {
   }*/
 
   async obtenerTotales() {
-   return await this.prismaService.Totales.findMany({
+   return await this.prismaService.totales.findMany({
     select: {
-      IdProducto: true,
-      Nombre: true,
-      Descripcion: true,
-      Precio: true,
-      Stock: true,
-      Categorias: {
-        select: {
-          IdCategoria: true,
-          Nombre: true,
-        }
-      },
-      Proveedores: {
-        select: {
-          IdProveedor: true,
-          NombreEmpresa: true
-        }
-      },
-      Estado: true,
-      Imagen: true
+      Factura: true,
+      TotalMonetarioVendido: true,
+      TotalProductosVendidos: true,
+      Fecha: true
+    }
+   })
+  }
+
+  async obtenerTotalesDia() {
+   return await this.prismaService.totalesDia.findMany({
+    select: {
+      TotalProductos: true,
+      TotalVendido: true,
+      Fecha: true
     }
    })
   }
