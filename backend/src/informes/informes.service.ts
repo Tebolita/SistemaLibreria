@@ -49,4 +49,15 @@ export class InformesService {
     }
    })
   }
+
+  async obtenerTotalesTiempo() {
+   return await this.prismaService.totalesTiempo.findMany({
+    select: {
+      TotalProductos: true,
+      TotalVendido: true,
+      Anio: true,
+      Mes: true
+    }
+   })
+  }
 }

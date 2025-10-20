@@ -206,3 +206,10 @@ view TotalesDia {
   TotalProductos Int?
   Fecha          DateTime? @db.Date
 }
+
+view TotalesTiempo {
+  TotalVendido   Decimal? @db.Decimal(38, 2)
+  TotalProductos Int?
+  Mes            Int?
+  Anio           Int?
+}

@@ -40,4 +40,8 @@ export class InformesController {
   obtenerTotalesDia() {
     return this.informesService.obtenerTotalesDia();
   }
+  @Get('totalesTiempo')
+  obtenerTotalesTiempo() {
+    return this.informesService.obtenerTotalesTiempo();
+  }
 }
