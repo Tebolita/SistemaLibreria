@@ -52,6 +52,13 @@ const Menus = [
     ]
   }, 
   {
+    Titulo: "Reportes",
+    SubMenus: [
+        { Icon: <BookPlus />, Titulo: "Reporte Diario", ruta: "/administracion/reporte/diario" },
+        { Icon: <BookPlus />, Titulo: "Reporte Mensual", ruta: "/administracion/reporte/mensual" }
+    ]
+  }, 
+  {
     Titulo: "Salir",
     SubMenus: [
       { Icon: <LogOut />, Titulo: "Cerrar Sesion", ruta: "/", },
